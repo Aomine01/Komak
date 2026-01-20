@@ -15,9 +15,13 @@ import { supabase } from './supabaseClient';
 import { validateAllFields } from './utils/validation';
 import { checkCooldown, setCooldown } from './utils/cooldown';
 import { REGIONS, DIRECTIONS } from './data/options';
+import { translations } from './utils/translations';
 
 function App() {
     // ========== STATE MANAGEMENT ==========
+    const [language, setLanguage] = useState('uz'); // Language state for multi-language
+    const t = translations[language]; // Current translations
+
     const [formData, setFormData] = useState({
         fullName: '',
         age: '',
@@ -186,11 +190,43 @@ function App() {
     return (
         <div className="min-h-screen bg-background-light flex flex-col">
 
+
             {/* Header */}
             <header className="header-sticky px-6 md:px-20 lg:px-40 py-4">
                 <div className="flex items-center justify-between max-w-[1200px] mx-auto">
                     <div className="flex items-center gap-3">
                         <img src="/logo.svg" alt="KO'MAK LOYIHASI" className="h-10 w-auto" />
+                    </div>
+
+                    {/* Language Switcher */}
+                    <div className="flex gap-2">
+                        <button
+                            onClick={() => setLanguage('uz')}
+                            className={`px-4 py-2 rounded-lg text-sm font-bold transition-all ${language === 'uz'
+                                ? 'bg-primary text-white'
+                                : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                                }`}
+                        >
+                            UZ
+                        </button>
+                        <button
+                            onClick={() => setLanguage('ru')}
+                            className={`px-4 py-2 rounded-lg text-sm font-bold transition-all ${language === 'ru'
+                                ? 'bg-primary text-white'
+                                : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                                }`}
+                        >
+                            RU
+                        </button>
+                        <button
+                            onClick={() => setLanguage('en')}
+                            className={`px-4 py-2 rounded-lg text-sm font-bold transition-all ${language === 'en'
+                                ? 'bg-primary text-white'
+                                : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                                }`}
+                        >
+                            EN
+                        </button>
                     </div>
                 </div>
             </header>
@@ -202,7 +238,7 @@ function App() {
                 <section className="hero-section">
                     <div className="max-w-2xl space-y-6">
                         <h1 className="text-white text-4xl md:text-5xl font-black tracking-tight leading-tight">
-                            KOMAK bu imkoniyat
+                            {t.heroTitle}
                         </h1>
                     </div>
                 </section>
@@ -249,8 +285,8 @@ function App() {
                 {/* Form Section */}
                 <section className="max-w-4xl mx-auto">
                     <div className="mb-8 text-center md:text-left">
-                        <h2 className="text-primary text-3xl font-extrabold tracking-tight">Ariza Topshirish Formasi</h2>
-                        <p className="text-slate-500 mt-2">Iltimos, quyidagi barcha ma'lumotlarni diqqat bilan to'ldiring.</p>
+                        <h2 className="text-primary text-3xl font-extrabold tracking-tight">{t.formTitle}</h2>
+                        <p className="text-slate-500 mt-2">{t.formSubtitle}</p>
                     </div>
 
                     <div className="form-card">
@@ -261,12 +297,12 @@ function App() {
                                 <div className="space-y-6">
                                     <div className="section-header">
                                         <span className="material-symbols-outlined">person</span>
-                                        <h3>Shaxsiy ma'lumotlar</h3>
+                                        <h3>{t.personalInfo}</h3>
                                     </div>
 
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                         <div className="flex flex-col gap-2">
-                                            <label className="text-sm font-semibold text-slate-700">To'liq ism (F.I.SH)</label>
+                                            <label className="text-sm font-semibold text-slate-700">{t.fullName}</label>
                                             <input
                                                 type="text"
                                                 name="fullName"
@@ -274,7 +310,7 @@ function App() {
                                                 onChange={handleInputChange}
                                                 disabled={isSubmitting}
                                                 className={`input-field ${formErrors.fullName ? 'border-red-500' : ''}`}
-                                                placeholder="Ismingizni kiriting"
+                                                placeholder={t.fullNamePlaceholder}
                                             />
                                             {formErrors.fullName && <p className="error-text">{formErrors.fullName}</p>}
                                         </div>
@@ -356,8 +392,8 @@ function App() {
 
                                     <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-6 bg-primary/5 rounded-2xl border border-primary/10">
                                         <div>
-                                            <p className="font-bold text-primary">Markaz ochishni rejalashtiryapsizmi?</p>
-                                            <p className="text-sm text-slate-500">Yangi o'quv yoki xizmat ko'rsatish markazi</p>
+                                            <p className="font-bold text-primary">{t.planningCenter}</p>
+                                            <p className="text-sm text-slate-500">{t.planningCenterDesc}</p>
                                         </div>
                                         <div className="toggle-group">
                                             <button
@@ -438,10 +474,17 @@ function App() {
                             <span className="material-symbols-outlined text-primary text-[20px]">call</span>
                             <span className="font-medium">+998 71 200 00 00</span>
                         </div>
-                        <div className="flex items-center gap-2">
-                            <span className="material-symbols-outlined text-primary text-[20px]">mail</span>
-                            <span className="font-medium">info@komak.uz</span>
-                        </div>
+                        <a
+                            href="https://t.me/komak_loyihasi"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-2 hover:text-primary transition-colors"
+                        >
+                            <svg className="w-5 h-5 text-primary" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.18-.357.295-.6.295-.002 0-.003 0-.005 0l.213-3.054 5.56-5.022c.24-.213-.054-.334-.373-.121l-6.869 4.326-2.96-.924c-.64-.203-.658-.64.135-.954l11.566-4.458c.538-.196 1.006.128.832.941z" />
+                            </svg>
+                            <span className="font-medium">{t.telegram}</span>
+                        </a>
                     </div>
                     <div className="text-xs text-slate-400 text-center md:text-right">
                         © 2026 KO'MAK LOYIHASI. Barcha huquqlar himoyalangan.
