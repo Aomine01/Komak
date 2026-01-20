@@ -204,9 +204,6 @@ function App() {
                         <h1 className="text-white text-4xl md:text-5xl font-black tracking-tight leading-tight">
                             KOMAK bu imkoniyat
                         </h1>
-                        <p className="text-blue-100 text-lg md:text-xl font-light opacity-90 max-w-lg mx-auto">
-                            KO'MAK LOYIHASI orqali yangi imkoniyatlar eshigini oching va o'z innovatsion loyihangizni boshlang.
-                        </p>
                     </div>
                 </section>
 
