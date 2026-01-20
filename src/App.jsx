@@ -192,10 +192,6 @@ function App() {
                     <div className="flex items-center gap-3">
                         <img src="/logo.svg" alt="KO'MAK LOYIHASI" className="h-10 w-auto" />
                     </div>
-                    <button className="flex items-center justify-center gap-2 rounded-xl h-10 px-4 bg-primary text-white text-sm font-bold tracking-wide">
-                        <span className="material-symbols-outlined text-[18px]">language</span>
-                        <span>UZ</span>
-                    </button>
                 </div>
             </header>
 
@@ -206,7 +202,7 @@ function App() {
                 <section className="hero-section">
                     <div className="max-w-2xl space-y-6">
                         <h1 className="text-white text-4xl md:text-5xl font-black tracking-tight leading-tight">
-                            Imkoniyatlarni Qayta Tiklash
+                            KOMAK bu imkoniyat
                         </h1>
                         <p className="text-blue-100 text-lg md:text-xl font-light opacity-90 max-w-lg mx-auto">
                             KO'MAK LOYIHASI orqali yangi imkoniyatlar eshigini oching va o'z innovatsion loyihangizni boshlang.
