@@ -35,16 +35,19 @@
 /* Global Styles */
 @layer base {
   * {
-    @apply box-border;
+    box-sizing: border-box;
   }
 
   body {
-    @apply font-['Inter', _sans-serif] bg-background-light text-slate-900 antialiased;
     font-family: 'Inter', sans-serif;
+    background-color: var(--background-light);
+    color: var(--slate-900);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   html {
-    @apply scroll-smooth;
+    scroll-behavior: smooth;
   }
 }
 
