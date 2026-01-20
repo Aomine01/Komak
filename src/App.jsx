@@ -250,8 +250,8 @@ function App() {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                         </svg>
                         <div>
-                            <h3 className="font-semibold text-green-800">Muvaffaqiyatli yuborildi!</h3>
-                            <p className="text-green-700 text-sm mt-1">Arizangiz qabul qilindi. Tez orada siz bilan bog'lanamiz.</p>
+                            <h3 className="font-semibold text-green-800">{t.successTitle}</h3>
+                            <p className="text-green-700 text-sm mt-1">{t.successMessage}</p>
                         </div>
                     </div>
                 )}
@@ -262,7 +262,7 @@ function App() {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
                         <div>
-                            <h3 className="font-semibold text-red-800">Xatolik</h3>
+                            <h3 className="font-semibold text-red-800">{t.errorTitle}</h3>
                             <p className="text-red-700 text-sm mt-1">{formErrors.submit}</p>
                         </div>
                     </div>
@@ -274,9 +274,9 @@ function App() {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
                         <div>
-                            <h3 className="font-semibold text-yellow-800">Kuting</h3>
+                            <h3 className="font-semibold text-yellow-800">{t.cooldownTitle}</h3>
                             <p className="text-yellow-700 text-sm mt-1">
-                                Siz yaqinda ariza topshirdingiz. Qayta yuborish uchun {cooldownRemaining} soniya kuting.
+                                {t.cooldownMessage.replace('{seconds}', cooldownRemaining)}
                             </p>
                         </div>
                     </div>
@@ -316,7 +316,7 @@ function App() {
                                         </div>
 
                                         <div className="flex flex-col gap-2">
-                                            <label className="text-sm font-semibold text-slate-700">Yoshingiz</label>
+                                            <label className="text-sm font-semibold text-slate-700">{t.age}</label>
                                             <input
                                                 type="number"
                                                 name="age"
@@ -326,13 +326,13 @@ function App() {
                                                 min="14"
                                                 max="35"
                                                 className={`input-field ${formErrors.age ? 'border-red-500' : ''}`}
-                                                placeholder="Masalan: 25"
+                                                placeholder={t.agePlaceholder}
                                             />
                                             {formErrors.age && <p className="error-text">{formErrors.age}</p>}
                                         </div>
 
                                         <div className="flex flex-col gap-2">
-                                            <label className="text-sm font-semibold text-slate-700">Telefon raqami</label>
+                                            <label className="text-sm font-semibold text-slate-700">{t.phone}</label>
                                             <div className="relative flex items-center">
                                                 <span className="absolute left-4 font-medium text-slate-500">+998</span>
                                                 <input
@@ -342,14 +342,14 @@ function App() {
                                                     onChange={handleInputChange}
                                                     disabled={isSubmitting}
                                                     className={`input-field pl-16 ${formErrors.phone ? 'border-red-500' : ''}`}
-                                                    placeholder="90 123 45 67"
+                                                    placeholder={t.phonePlaceholder}
                                                 />
                                             </div>
                                             {formErrors.phone && <p className="error-text">{formErrors.phone}</p>}
                                         </div>
 
                                         <div className="flex flex-col gap-2">
-                                            <label className="text-sm font-semibold text-slate-700">Viloyat</label>
+                                            <label className="text-sm font-semibold text-slate-700">{t.region}</label>
                                             <select
                                                 name="region"
                                                 value={formData.region}
@@ -357,7 +357,7 @@ function App() {
                                                 disabled={isSubmitting}
                                                 className={`input-field ${formErrors.region ? 'border-red-500' : ''}`}
                                             >
-                                                <option value="">Viloyatni tanlang</option>
+                                                <option value="">{t.regionPlaceholder}</option>
                                                 {REGIONS.map(region => (
                                                     <option key={region} value={region}>{region}</option>
                                                 ))}
@@ -367,7 +367,7 @@ function App() {
                                     </div>
 
                                     <div className="flex flex-col gap-2">
-                                        <label className="text-sm font-semibold text-slate-700">Tuman / Shahar</label>
+                                        <label className="text-sm font-semibold text-slate-700">{t.district}</label>
                                         <input
                                             type="text"
                                             name="district"
@@ -375,7 +375,7 @@ function App() {
                                             onChange={handleInputChange}
                                             disabled={isSubmitting}
                                             className={`input-field ${formErrors.district ? 'border-red-500' : ''}`}
-                                            placeholder="Tumanni kiriting"
+                                            placeholder={t.districtPlaceholder}
                                         />
                                         {formErrors.district && <p className="error-text">{formErrors.district}</p>}
                                     </div>
@@ -387,7 +387,7 @@ function App() {
                                 <div className="space-y-8">
                                     <div className="section-header">
                                         <span className="material-symbols-outlined">lightbulb</span>
-                                        <h3>Loyiha tafsilotlari</h3>
+                                        <h3>{t.projectDetails}</h3>
                                     </div>
 
                                     <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-6 bg-primary/5 rounded-2xl border border-primary/10">
@@ -402,7 +402,7 @@ function App() {
                                                 disabled={isSubmitting}
                                                 className={`toggle-btn ${formData.planningCenter === true ? 'active' : ''}`}
                                             >
-                                                HA
+                                                {t.yes}
                                             </button>
                                             <button
                                                 type="button"
@@ -410,14 +410,14 @@ function App() {
                                                 disabled={isSubmitting}
                                                 className={`toggle-btn ${formData.planningCenter === false ? 'active' : ''}`}
                                             >
-                                                YO'Q
+                                                {t.no}
                                             </button>
                                         </div>
                                     </div>
                                     {formErrors.planningCenter && <p className="error-text">{formErrors.planningCenter}</p>}
 
                                     <div className="space-y-4">
-                                        <p className="text-sm font-semibold text-slate-700">Yo'nalishlarni tanlang:</p>
+                                        <p className="text-sm font-semibold text-slate-700">{t.selectDirections}</p>
                                         <div className="flex flex-wrap gap-3">
                                             {DIRECTIONS.map(direction => (
                                                 <button
@@ -447,18 +447,18 @@ function App() {
                                                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                                                     <path className="opacity-100" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                                                 </svg>
-                                                <span>Ariza Yuborilmoqda...</span>
+                                                <span>{t.submitting}</span>
                                             </>
                                         ) : cooldownRemaining > 0 ? (
-                                            <span>Kuting ({cooldownRemaining}s)</span>
+                                            <span>{t.waiting} ({cooldownRemaining}s)</span>
                                         ) : (
                                             <>
                                                 <span className="material-symbols-outlined">send</span>
-                                                <span>Ariza Yuborish</span>
+                                                <span>{t.submitButton}</span>
                                             </>
                                         )}
                                     </button>
-                                    <p className="text-center text-xs text-slate-400 mt-4">Ma'lumotlaringiz xavfsizligi kafolatlanadi.</p>
+                                    <p className="text-center text-xs text-slate-400 mt-4">{t.securityNote}</p>
                                 </div>
                             </form>
                         </div>

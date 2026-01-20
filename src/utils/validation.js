@@ -63,8 +63,9 @@ export const validateAge = (age) => {
 /**
  * Validates Uzbek phone number
  * Rules:
- * - Must match format: +998 XX XXX XX XX
- * - Strict regex pattern for Uzbek mobile operators
+ * - Must be 9 digits (without +998 prefix)
+ * - Format: XX XXX XX XX or XXXXXXXXX
+ * - The UI shows +998 as a fixed prefix, user only enters remaining digits
  */
 export const validatePhone = (phone) => {
     if (!phone || phone.trim().length === 0) {
@@ -74,14 +75,16 @@ export const validatePhone = (phone) => {
         };
     }
 
-    // Uzbek phone format: +998 XX XXX XX XX (with or without spaces)
-    // Accepts formats like: +998901234567, +998 90 123 45 67
-    const phoneRegex = /^\+998\s?\d{2}\s?\d{3}\s?\d{2}\s?\d{2}$/;
+    // Remove all spaces and check if it's exactly 9 digits
+    const cleanPhone = phone.replace(/\s/g, '');
 
-    if (!phoneRegex.test(phone)) {
+    // Accept 9 digits only (the part after +998)
+    const phoneRegex = /^\d{9}$/;
+
+    if (!phoneRegex.test(cleanPhone)) {
         return {
             isValid: false,
-            errorMessage: "Telefon raqami +998 XX XXX XX XX formatida bo'lishi kerak"
+            errorMessage: "Telefon raqami 9 ta raqamdan iborat bo'lishi kerak (masalan: 90 123 45 67)"
         };
     }
 
