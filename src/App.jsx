@@ -192,6 +192,11 @@ function App() {
             // Scroll to top to show success message
             window.scrollTo({ top: 0, behavior: 'smooth' });
 
+            // Redirect to Telegram channel after 2 seconds
+            setTimeout(() => {
+                window.location.href = 'https://t.me/komak_loyihasi';
+            }, 2000);
+
         } catch (error) {
             // 5. ERROR HANDLING: Log actual error, show generic message
             console.error('Submission error:', error);
@@ -218,7 +223,7 @@ function App() {
                         KO'MAK LOYIHASI
                     </h1>
                     <p className="text-gray-600 text-lg">
-                        Ro'yxatdan o'tish formasi
+                        So'rovnoma formasi
                     </p>
                 </div>
 
@@ -274,7 +279,7 @@ function App() {
                             onChange={handleInputChange}
                             disabled={isSubmitting}
                             className={`input-field ${formErrors.fullName ? 'border-red-500 ring-red-500' : ''}`}
-                            placeholder="Masalan: Aliyev Vali Akramovich"
+                        // placeholder="Masalan: Aliyev Vali Akramovich"
                         />
                         {formErrors.fullName && (
                             <p className="error-text">{formErrors.fullName}</p>
@@ -296,7 +301,7 @@ function App() {
                             min="14"
                             max="35"
                             className={`input-field ${formErrors.age ? 'border-red-500 ring-red-500' : ''}`}
-                            placeholder="14 dan 35 gacha"
+                        // placeholder="14 dan 35 gacha"
                         />
                         {formErrors.age && (
                             <p className="error-text">{formErrors.age}</p>
@@ -316,7 +321,7 @@ function App() {
                             onChange={handleInputChange}
                             disabled={isSubmitting}
                             className={`input-field ${formErrors.phone ? 'border-red-500 ring-red-500' : ''}`}
-                            placeholder="+998 90 123 45 67"
+                        // placeholder="+998 90 123 45 67"
                         />
                         {formErrors.phone && (
                             <p className="error-text">{formErrors.phone}</p>
@@ -359,7 +364,7 @@ function App() {
                             onChange={handleInputChange}
                             disabled={isSubmitting}
                             className={`input-field ${formErrors.district ? 'border-red-500 ring-red-500' : ''}`}
-                            placeholder="Masalan: Chilonzor"
+                        // placeholder="Masalan: Chilonzor"
                         />
                         {formErrors.district && (
                             <p className="error-text">{formErrors.district}</p>

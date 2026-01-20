@@ -15,8 +15,7 @@ export const REGIONS = [
     'Samarqand',
     'Sirdaryo',
     'Surxondaryo',
-    'Toshkent viloyati',
-    'Toshkent shahri'
+    'Toshkent viloyati'
 ];
 
 /**
