@@ -2,9 +2,10 @@
  * KO'MAK LOYIHASI - MODERN DESIGN SYSTEM
  * 
  * Color Palette:
- * - Primary: #0b0b47 (Dark Navy)
+ * - Primary: #0E3B2A (Dark Green)
+ * - Accent: #2FBF84 (Bright Green)
  * - Background Light: #f6f6f8
- * - Background Dark: #121220
+ * - Background Dark: #0a1f15
  * 
  * Typography: Inter (Google Fonts)
  */
@@ -18,10 +19,11 @@
 
 /* Root Variables */
 :root {
-  --primary: #0b0b47;
-  --primary-hover: #090938;
+  --primary: #0E3B2A;
+  --primary-hover: #0b2d1f;
+  --accent: #2FBF84;
   --background-light: #f6f6f8;
-  --background-dark: #121220;
+  --background-dark: #0a1f15;
   --slate-50: #f8fafc;
   --slate-100: #f1f5f9;
   --slate-200: #e2e8f0;
