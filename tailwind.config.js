@@ -7,13 +7,19 @@ export default {
     theme: {
         extend: {
             colors: {
-                'primary': '#0b0b47',
+                'primary': '#0E3B2A',
+                'accent': '#2FBF84',
                 'background-light': '#f6f6f8',
                 'background-dark': '#121220',
-                navy: {
-                    500: '#0b0b47',
-                    600: '#090938',
-                    700: '#070728',
+                green: {
+                    500: '#2FBF84',
+                    600: '#28a974',
+                    700: '#1f8f5f',
+                },
+                darkgreen: {
+                    500: '#0E3B2A',
+                    600: '#0b2d1f',
+                    700: '#081f15',
                 }
             }
         },

@@ -195,7 +195,7 @@ function App() {
             <header className="header-sticky px-6 md:px-20 lg:px-40 py-4">
                 <div className="flex items-center justify-between max-w-[1200px] mx-auto">
                     <div className="flex items-center gap-3">
-                        <img src="/logo.svg" alt="KO'MAK LOYIHASI" className="h-10 w-auto" />
+                        <img src="/logo.svg" alt="KO'MAK LOYIHASI" className="h-14 w-auto" />
                     </div>
 
                     {/* Language Switcher */}
