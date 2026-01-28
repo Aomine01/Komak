@@ -61,10 +61,10 @@
     @apply sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-200;
   }
 
-  /* Hero Section - Plain Green Background */
+  /* Hero Section - Dark Green Background */
   .hero-section {
-    @apply px-8 md:px-12 py-20 md:py-24 rounded-3xl;
-    background: linear-gradient(135deg, #2FBF84 0%, #28a974 100%);
+    @apply px-8 md:px-12 py-20 md:py-24 rounded-3xl text-center flex items-center justify-center;
+    background: rgb(14 59 42);
   }
 
   /* Primary Button */
