@@ -1,12 +1,10 @@
 /**
- * KO'MAK LOYIHASI - MODERN APPLICATION COMPONENT
+ * KO'MAK+ LOYIHASI - EDUCATIONAL CENTER SURVEY
  * 
  * Features:
- * - Hero section with background image
- * - Modern form layout with sections
- * - Loading state with spinner
- * - Toggle buttons for planning center
- * - Pill-style direction selectors
+ * - 9-question survey for educational centers
+ * - Multi-language support (UZ/RU/EN)
+ * - Modern form layout with validation
  * - Telegram redirect after submission
  */
 
@@ -14,22 +12,24 @@ import { useState, useEffect } from 'react';
 import { supabase } from './supabaseClient';
 import { validateAllFields } from './utils/validation';
 import { checkCooldown, setCooldown } from './utils/cooldown';
-import { REGIONS, DIRECTIONS } from './data/options';
+import { REGIONS, OPERATING_STATUS, FOREIGN_LANGUAGES, ACHIEVEMENTS } from './data/formOptions';
 import { translations } from './utils/translations';
 
 function App() {
     // ========== STATE MANAGEMENT ==========
-    const [language, setLanguage] = useState('uz'); // Language state for multi-language
-    const t = translations[language]; // Current translations
+    const [language, setLanguage] = useState('uz');
+    const t = translations[language];
 
     const [formData, setFormData] = useState({
-        fullName: '',
-        age: '',
-        phone: '',
-        region: '',
-        district: '',
-        planningCenter: null,
-        centerDirections: []
+        name: '',                    // Q1: Ismingiz
+        centerName: '',              // Q2: O'quv markazingiz nomi
+        centerLocation: '',          // Q3: Joylashgan hudud
+        operatingStatus: '',         // Q4: Faoliyat ko'rsatyaptimi (HA/Jarayonda/YO'Q)
+        studentCount: '',            // Q5: O'quvchilar soni
+        languagesOffered: '',        // Q6: Nechta xorijiy til
+        achievements: [],            // Q7: O'quvchilar yutuqlari (multiple)
+        foreignUniversities: '',     // Q8: Chet universitetlar
+        loanInterest: null          // Q9: Qo'shimcha ssuda (true/false)
     });
 
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -77,32 +77,32 @@ function App() {
         }
     };
 
-    const handlePlanningChange = (value) => {
-        setFormData(prev => ({
-            ...prev,
-            planningCenter: value
-        }));
-
-        if (formErrors.planningCenter) {
-            setFormErrors(prev => ({
-                ...prev,
-                planningCenter: ''
-            }));
-        }
-    };
-
-    const handleDirectionChange = (direction) => {
+    const handleAchievementChange = (achievementValue) => {
         setFormData(prev => {
-            const currentDirections = prev.centerDirections;
-            const isSelected = currentDirections.includes(direction);
+            const currentAchievements = prev.achievements;
+            const isSelected = currentAchievements.includes(achievementValue);
 
             return {
                 ...prev,
-                centerDirections: isSelected
-                    ? currentDirections.filter(d => d !== direction)
-                    : [...currentDirections, direction]
+                achievements: isSelected
+                    ? currentAchievements.filter(a => a !== achievementValue)
+                    : [...currentAchievements, achievementValue]
             };
         });
+    };
+
+    const handleLoanChange = (value) => {
+        setFormData(prev => ({
+            ...prev,
+            loanInterest: value
+        }));
+
+        if (formErrors.loanInterest) {
+            setFormErrors(prev => ({
+                ...prev,
+                loanInterest: ''
+            }));
+        }
     };
 
     const handleSubmit = async (e) => {
@@ -110,9 +110,9 @@ function App() {
         setSubmitStatus(null);
 
         // Validation
-        const errors = validateAllFields(formData);
-        if (Object.keys(errors).length > 0) {
-            setFormErrors(errors);
+        const validation = validateAllFields(formData);
+        if (!validation.isValid) {
+            setFormErrors(validation.errors);
             window.scrollTo({ top: 0, behavior: 'smooth' });
             return;
         }
@@ -121,10 +121,7 @@ function App() {
         const { inCooldown, remainingSeconds } = checkCooldown();
         if (inCooldown) {
             setCooldownRemaining(remainingSeconds);
-            setSubmitStatus('error');
-            setFormErrors({
-                submit: `Iltimos, ${remainingSeconds} soniyadan keyin qayta urinib ko'ring.`
-            });
+            setSubmitStatus('cooldown');
             return;
         }
 
@@ -134,16 +131,18 @@ function App() {
 
         try {
             const { data, error } = await supabase
-                .from('applications')
+                .from('center_survey')
                 .insert([
                     {
-                        full_name: formData.fullName.trim(),
-                        age: parseInt(formData.age, 10),
-                        phone: formData.phone.trim(),
-                        region: formData.region,
-                        district: formData.district.trim(),
-                        planning_center: formData.planningCenter,
-                        center_directions: formData.centerDirections
+                        name: formData.name.trim(),
+                        center_name: formData.centerName.trim(),
+                        center_location: formData.centerLocation,
+                        operating_status: formData.operatingStatus,
+                        student_count: parseInt(formData.studentCount, 10),
+                        languages_offered: formData.languagesOffered,
+                        achievements: formData.achievements,
+                        foreign_universities: formData.foreignUniversities.trim(),
+                        loan_interest: formData.loanInterest
                     }
                 ])
                 .select();
@@ -159,13 +158,15 @@ function App() {
 
             // Reset form
             setFormData({
-                fullName: '',
-                age: '',
-                phone: '',
-                region: '',
-                district: '',
-                planningCenter: null,
-                centerDirections: []
+                name: '',
+                centerName: '',
+                centerLocation: '',
+                operatingStatus: '',
+                studentCount: '',
+                languagesOffered: '',
+                achievements: [],
+                foreignUniversities: '',
+                loanInterest: null
             });
 
             window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -179,7 +180,7 @@ function App() {
             console.error('Submission error:', error);
             setSubmitStatus('error');
             setFormErrors({
-                submit: "Xatolik yuz berdi. Iltimos, keyinroq urinib ko'ring."
+                submit: error.message || "Xatolik yuz berdi. Iltimos, keyinroq urinib ko'ring."
             });
         } finally {
             setIsSubmitting(false);
@@ -293,145 +294,230 @@ function App() {
                         <div className={`p-8 lg:p-12 ${isSubmitting ? 'loading-overlay' : ''}`}>
                             <form onSubmit={handleSubmit} className="space-y-10">
 
-                                {/* Personal Information Section */}
+                                {/* Question 1: Name */}
                                 <div className="space-y-6">
                                     <div className="section-header">
                                         <span className="material-symbols-outlined">person</span>
-                                        <h3>{t.personalInfo}</h3>
-                                    </div>
-
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                        <div className="flex flex-col gap-2">
-                                            <label className="text-sm font-semibold text-slate-700">{t.fullName}</label>
-                                            <input
-                                                type="text"
-                                                name="fullName"
-                                                value={formData.fullName}
-                                                onChange={handleInputChange}
-                                                disabled={isSubmitting}
-                                                className={`input-field ${formErrors.fullName ? 'border-red-500' : ''}`}
-                                                placeholder={t.fullNamePlaceholder}
-                                            />
-                                            {formErrors.fullName && <p className="error-text">{formErrors.fullName}</p>}
-                                        </div>
-
-                                        <div className="flex flex-col gap-2">
-                                            <label className="text-sm font-semibold text-slate-700">{t.age}</label>
-                                            <input
-                                                type="number"
-                                                name="age"
-                                                value={formData.age}
-                                                onChange={handleInputChange}
-                                                disabled={isSubmitting}
-                                                min="14"
-                                                max="35"
-                                                className={`input-field ${formErrors.age ? 'border-red-500' : ''}`}
-                                                placeholder={t.agePlaceholder}
-                                            />
-                                            {formErrors.age && <p className="error-text">{formErrors.age}</p>}
-                                        </div>
-
-                                        <div className="flex flex-col gap-2">
-                                            <label className="text-sm font-semibold text-slate-700">{t.phone}</label>
-                                            <div className="relative flex items-center">
-                                                <span className="absolute left-4 font-medium text-slate-500">+998</span>
-                                                <input
-                                                    type="tel"
-                                                    name="phone"
-                                                    value={formData.phone}
-                                                    onChange={handleInputChange}
-                                                    disabled={isSubmitting}
-                                                    className={`input-field pl-16 ${formErrors.phone ? 'border-red-500' : ''}`}
-                                                    placeholder={t.phonePlaceholder}
-                                                />
-                                            </div>
-                                            {formErrors.phone && <p className="error-text">{formErrors.phone}</p>}
-                                        </div>
-
-                                        <div className="flex flex-col gap-2">
-                                            <label className="text-sm font-semibold text-slate-700">{t.region}</label>
-                                            <select
-                                                name="region"
-                                                value={formData.region}
-                                                onChange={handleInputChange}
-                                                disabled={isSubmitting}
-                                                className={`input-field ${formErrors.region ? 'border-red-500' : ''}`}
-                                            >
-                                                <option value="">{t.regionPlaceholder}</option>
-                                                {REGIONS.map(region => (
-                                                    <option key={region} value={region}>{region}</option>
-                                                ))}
-                                            </select>
-                                            {formErrors.region && <p className="error-text">{formErrors.region}</p>}
-                                        </div>
+                                        <h3>1. {t.q1_name}</h3>
                                     </div>
 
                                     <div className="flex flex-col gap-2">
-                                        <label className="text-sm font-semibold text-slate-700">{t.district}</label>
                                         <input
                                             type="text"
-                                            name="district"
-                                            value={formData.district}
+                                            name="name"
+                                            value={formData.name}
                                             onChange={handleInputChange}
                                             disabled={isSubmitting}
-                                            className={`input-field ${formErrors.district ? 'border-red-500' : ''}`}
-                                            placeholder={t.districtPlaceholder}
+                                            className={`input-field ${formErrors.name ? 'border-red-500' : ''}`}
+                                            placeholder={t.q1_placeholder}
                                         />
-                                        {formErrors.district && <p className="error-text">{formErrors.district}</p>}
+                                        {formErrors.name && <p className="error-text">{formErrors.name}</p>}
                                     </div>
                                 </div>
 
                                 <hr className="border-slate-100" />
 
-                                {/* Project Details Section */}
-                                <div className="space-y-8">
+                                {/* Question 2: Center Name */}
+                                <div className="space-y-6">
                                     <div className="section-header">
-                                        <span className="material-symbols-outlined">lightbulb</span>
-                                        <h3>{t.projectDetails}</h3>
+                                        <span className="material-symbols-outlined">school</span>
+                                        <h3>2. {t.q2_centerName}</h3>
                                     </div>
 
-                                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-6 bg-primary/5 rounded-2xl border border-primary/10">
-                                        <div>
-                                            <p className="font-bold text-primary">{t.planningCenter}</p>
-                                            <p className="text-sm text-slate-500">{t.planningCenterDesc}</p>
-                                        </div>
-                                        <div className="toggle-group">
-                                            <button
-                                                type="button"
-                                                onClick={() => handlePlanningChange(true)}
-                                                disabled={isSubmitting}
-                                                className={`toggle-btn ${formData.planningCenter === true ? 'active' : ''}`}
-                                            >
-                                                {t.yes}
-                                            </button>
-                                            <button
-                                                type="button"
-                                                onClick={() => handlePlanningChange(false)}
-                                                disabled={isSubmitting}
-                                                className={`toggle-btn ${formData.planningCenter === false ? 'active' : ''}`}
-                                            >
-                                                {t.no}
-                                            </button>
-                                        </div>
+                                    <div className="flex flex-col gap-2">
+                                        <input
+                                            type="text"
+                                            name="centerName"
+                                            value={formData.centerName}
+                                            onChange={handleInputChange}
+                                            disabled={isSubmitting}
+                                            className={`input-field ${formErrors.centerName ? 'border-red-500' : ''}`}
+                                            placeholder={t.q2_placeholder}
+                                        />
+                                        {formErrors.centerName && <p className="error-text">{formErrors.centerName}</p>}
                                     </div>
-                                    {formErrors.planningCenter && <p className="error-text">{formErrors.planningCenter}</p>}
+                                </div>
 
-                                    <div className="space-y-4">
-                                        <p className="text-sm font-semibold text-slate-700">{t.selectDirections}</p>
-                                        <div className="flex flex-wrap gap-3">
-                                            {DIRECTIONS.map(direction => (
-                                                <button
-                                                    key={direction}
-                                                    type="button"
-                                                    onClick={() => handleDirectionChange(direction)}
-                                                    disabled={isSubmitting}
-                                                    className={`pill-btn ${formData.centerDirections.includes(direction) ? 'active' : ''}`}
-                                                >
-                                                    {direction}
-                                                </button>
+                                <hr className="border-slate-100" />
+
+                                {/* Question 3: Center Location */}
+                                <div className="space-y-6">
+                                    <div className="section-header">
+                                        <span className="material-symbols-outlined">location_on</span>
+                                        <h3>3. {t.q3_location}</h3>
+                                    </div>
+
+                                    <div className="flex flex-col gap-2">
+                                        <select
+                                            name="centerLocation"
+                                            value={formData.centerLocation}
+                                            onChange={handleInputChange}
+                                            disabled={isSubmitting}
+                                            className={`input-field ${formErrors.centerLocation ? 'border-red-500' : ''}`}
+                                        >
+                                            <option value="">{t.q3_placeholder}</option>
+                                            {REGIONS.map(region => (
+                                                <option key={region} value={region}>{region}</option>
                                             ))}
-                                        </div>
+                                        </select>
+                                        {formErrors.centerLocation && <p className="error-text">{formErrors.centerLocation}</p>}
                                     </div>
+                                </div>
+
+                                <hr className="border-slate-100" />
+
+                                {/* Question 4: Operating Status */}
+                                <div className="space-y-6">
+                                    <div className="section-header">
+                                        <span className="material-symbols-outlined">store</span>
+                                        <h3>4. {t.q4_status}</h3>
+                                    </div>
+
+                                    <div className="flex flex-col gap-2">
+                                        <select
+                                            name="operatingStatus"
+                                            value={formData.operatingStatus}
+                                            onChange={handleInputChange}
+                                            disabled={isSubmitting}
+                                            className={`input-field ${formErrors.operatingStatus ? 'border-red-500' : ''}`}
+                                        >
+                                            <option value="">Tanlang</option>
+                                            {OPERATING_STATUS.map(status => (
+                                                <option key={status.value} value={status.value}>{status.label}</option>
+                                            ))}
+                                        </select>
+                                        {formErrors.operatingStatus && <p className="error-text">{formErrors.operatingStatus}</p>}
+                                    </div>
+                                </div>
+
+                                <hr className="border-slate-100" />
+
+                                {/* Question 5: Student Count */}
+                                <div className="space-y-6">
+                                    <div className="section-header">
+                                        <span className="material-symbols-outlined">groups</span>
+                                        <h3>5. {t.q5_students}</h3>
+                                    </div>
+
+                                    <div className="flex flex-col gap-2">
+                                        <input
+                                            type="number"
+                                            name="studentCount"
+                                            value={formData.studentCount}
+                                            onChange={handleInputChange}
+                                            disabled={isSubmitting}
+                                            min="0"
+                                            className={`input-field ${formErrors.studentCount ? 'border-red-500' : ''}`}
+                                            placeholder={t.q5_placeholder}
+                                        />
+                                        {formErrors.studentCount && <p className="error-text">{formErrors.studentCount}</p>}
+                                    </div>
+                                </div>
+
+                                <hr className="border-slate-100" />
+
+                                {/* Question 6: Languages Offered */}
+                                <div className="space-y-6">
+                                    <div className="section-header">
+                                        <span className="material-symbols-outlined">translate</span>
+                                        <h3>6. {t.q6_languages}</h3>
+                                    </div>
+
+                                    <div className="flex flex-col gap-2">
+                                        <select
+                                            name="languagesOffered"
+                                            value={formData.languagesOffered}
+                                            onChange={handleInputChange}
+                                            disabled={isSubmitting}
+                                            className={`input-field ${formErrors.languagesOffered ? 'border-red-500' : ''}`}
+                                        >
+                                            <option value="">Tanlang</option>
+                                            {FOREIGN_LANGUAGES.map(lang => (
+                                                <option key={lang.value} value={lang.value}>{lang.label}</option>
+                                            ))}
+                                        </select>
+                                        {formErrors.languagesOffered && <p className="error-text">{formErrors.languagesOffered}</p>}
+                                    </div>
+                                </div>
+
+                                <hr className="border-slate-100" />
+
+                                {/* Question 7: Achievements */}
+                                <div className="space-y-6">
+                                    <div className="section-header">
+                                        <span className="material-symbols-outlined">emoji_events</span>
+                                        <h3>7. {t.q7_achievements}</h3>
+                                    </div>
+
+                                    <p className="text-sm text-slate-500 mb-4">{t.q7_description}</p>
+
+                                    <div className="space-y-3">
+                                        {ACHIEVEMENTS.map(achievement => (
+                                            <label key={achievement.value} className="flex items-center gap-3 cursor-pointer p-3 rounded-lg hover:bg-slate-50 transition-colors">
+                                                <input
+                                                    type="checkbox"
+                                                    checked={formData.achievements.includes(achievement.value)}
+                                                    onChange={() => handleAchievementChange(achievement.value)}
+                                                    disabled={isSubmitting}
+                                                    className="w-5 h-5 text-primary border-slate-300 rounded focus:ring-2 focus:ring-primary/20 cursor-pointer"
+                                                />
+                                                <span className="text-sm font-medium text-slate-700">{achievement.label}</span>
+                                            </label>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                <hr className="border-slate-100" />
+
+                                {/* Question 8: Foreign Universities */}
+                                <div className="space-y-6">
+                                    <div className="section-header">
+                                        <span className="material-symbols-outlined">public</span>
+                                        <h3>8. {t.q8_universities}</h3>
+                                    </div>
+
+                                    <div className="flex flex-col gap-2">
+                                        <input
+                                            type="text"
+                                            name="foreignUniversities"
+                                            value={formData.foreignUniversities}
+                                            onChange={handleInputChange}
+                                            disabled={isSubmitting}
+                                            className={`input-field ${formErrors.foreignUniversities ? 'border-red-500' : ''}`}
+                                            placeholder={t.q8_placeholder}
+                                        />
+                                        {formErrors.foreignUniversities && <p className="error-text">{formErrors.foreignUniversities}</p>}
+                                    </div>
+                                </div>
+
+                                <hr className="border-slate-100" />
+
+                                {/* Question 9: Loan Interest */}
+                                <div className="space-y-6">
+                                    <div className="section-header">
+                                        <span className="material-symbols-outlined">attach_money</span>
+                                        <h3>9. {t.q9_loan}</h3>
+                                    </div>
+
+                                    <div className="toggle-group">
+                                        <button
+                                            type="button"
+                                            onClick={() => handleLoanChange(true)}
+                                            disabled={isSubmitting}
+                                            className={`toggle-btn ${formData.loanInterest === true ? 'active' : ''}`}
+                                        >
+                                            {t.q9_yes}
+                                        </button>
+                                        <button
+                                            type="button"
+                                            onClick={() => handleLoanChange(false)}
+                                            disabled={isSubmitting}
+                                            className={`toggle-btn ${formData.loanInterest === false ? 'active' : ''}`}
+                                        >
+                                            {t.q9_no}
+                                        </button>
+                                    </div>
+                                    {formErrors.loanInterest && <p className="error-text">{formErrors.loanInterest}</p>}
                                 </div>
 
                                 {/* Submit Button */}

@@ -1,33 +1,23 @@
 /**
- * SECURITY MODULE: INPUT VALIDATION
- * 
- * Pure validation functions with strict regex patterns.
- * Each function returns { isValid: boolean, errorMessage: string }
- * 
- * CRITICAL: These validations prevent malformed data from reaching the database.
+ * Form Validation Logic for Educational Center Survey
+ * Validates all 9 questions
  */
 
 /**
- * Validates full name (F.I.Sh.)
- * Rules:
- * - Required (min 3 characters)
- * - No numbers or special symbols
- * - Only letters and spaces allowed
+ * Validates name (Question 1)
  */
-export const validateFullName = (name) => {
-    if (!name || name.trim().length < 3) {
+export const validateName = (name) => {
+    if (!name || name.trim().length === 0) {
         return {
             isValid: false,
-            errorMessage: "F.I.Sh. kamida 3 ta belgidan iborat bo'lishi kerak"
+            errorMessage: "Iltimos, ismingizni kiriting"
         };
     }
 
-    // Only letters (including Uzbek characters) and spaces
-    const nameRegex = /^[a-zA-Z\u0400-\u04FF\s']+$/;
-    if (!nameRegex.test(name)) {
+    if (name.trim().length < 2) {
         return {
             isValid: false,
-            errorMessage: "F.I.Sh. faqat harflardan iborat bo'lishi kerak"
+            errorMessage: "Ism kamida 2 ta harfdan iborat bo'lishi kerak"
         };
     }
 
@@ -35,25 +25,20 @@ export const validateFullName = (name) => {
 };
 
 /**
- * Validates age
- * Rules:
- * - Must be a number
- * - Strict range: 14-35 (inclusive)
+ * Validates center name (Question 2)
  */
-export const validateAge = (age) => {
-    const ageNum = parseInt(age, 10);
-
-    if (isNaN(ageNum)) {
+export const validateCenterName = (centerName) => {
+    if (!centerName || centerName.trim().length === 0) {
         return {
             isValid: false,
-            errorMessage: "Yoshni to'g'ri kiriting"
+            errorMessage: "O'quv markazi nomini kiriting"
         };
     }
 
-    if (ageNum < 14 || ageNum > 35) {
+    if (centerName.trim().length < 3) {
         return {
             isValid: false,
-            errorMessage: "Yosh 14 dan 35 gacha bo'lishi kerak"
+            errorMessage: "Markaz nomi kamida 3 ta harfdan iborat bo'lishi kerak"
         };
     }
 
@@ -61,30 +46,13 @@ export const validateAge = (age) => {
 };
 
 /**
- * Validates Uzbek phone number
- * Rules:
- * - Must be 9 digits (without +998 prefix)
- * - Format: XX XXX XX XX or XXXXXXXXX
- * - The UI shows +998 as a fixed prefix, user only enters remaining digits
+ * Validates center location (Question 3)
  */
-export const validatePhone = (phone) => {
-    if (!phone || phone.trim().length === 0) {
+export const validateCenterLocation = (location) => {
+    if (!location || location.trim().length === 0) {
         return {
             isValid: false,
-            errorMessage: "Telefon raqamini kiriting"
-        };
-    }
-
-    // Remove all spaces and check if it's exactly 9 digits
-    const cleanPhone = phone.replace(/\s/g, '');
-
-    // Accept 9 digits only (the part after +998)
-    const phoneRegex = /^\d{9}$/;
-
-    if (!phoneRegex.test(cleanPhone)) {
-        return {
-            isValid: false,
-            errorMessage: "Telefon raqami 9 ta raqamdan iborat bo'lishi kerak (masalan: 90 123 45 67)"
+            errorMessage: "Hududni tanlang"
         };
     }
 
@@ -92,15 +60,21 @@ export const validatePhone = (phone) => {
 };
 
 /**
- * Validates region selection
- * Rules:
- * - Must be selected (not default empty option)
+ * Validates operating status (Question 4)
  */
-export const validateRegion = (region) => {
-    if (!region || region.trim().length === 0) {
+export const validateOperatingStatus = (status) => {
+    if (!status) {
         return {
             isValid: false,
-            errorMessage: "Viloyatni tanlang"
+            errorMessage: "Faoliyat holatini tanlang"
+        };
+    }
+
+    const validStatuses = ['ha', 'jarayonda', 'yoq'];
+    if (!validStatuses.includes(status)) {
+        return {
+            isValid: false,
+            errorMessage: "Noto'g'ri tanlov"
         };
     }
 
@@ -108,15 +82,28 @@ export const validateRegion = (region) => {
 };
 
 /**
- * Validates district/city
- * Rules:
- * - Required (min 2 characters)
+ * Validates student count (Question 5)
  */
-export const validateDistrict = (district) => {
-    if (!district || district.trim().length < 2) {
+export const validateStudentCount = (count) => {
+    if (!count || count.toString().trim().length === 0) {
         return {
             isValid: false,
-            errorMessage: "Tuman/shaharni kiriting (kamida 2 ta harf)"
+            errorMessage: "O'quvchilar sonini kiriting"
+        };
+    }
+
+    const numCount = parseInt(count);
+    if (isNaN(numCount) || numCount < 0) {
+        return {
+            isValid: false,
+            errorMessage: "Musbat raqam kiriting"
+        };
+    }
+
+    if (numCount > 10000) {
+        return {
+            isValid: false,
+            errorMessage: "O'quvchilar soni juda ko'p ko'rinmoqda"
         };
     }
 
@@ -124,15 +111,21 @@ export const validateDistrict = (district) => {
 };
 
 /**
- * Validates planning center radio selection
- * Rules:
- * - Must be explicitly true or false (boolean)
+ * Validates languages offered (Question 6)
  */
-export const validatePlanningCenter = (value) => {
-    if (value === null || value === undefined || value === '') {
+export const validateLanguagesOffered = (languages) => {
+    if (!languages) {
         return {
             isValid: false,
-            errorMessage: "Iltimos, javob tanlang"
+            errorMessage: "Xorijiy tillar sonini tanlang"
+        };
+    }
+
+    const validOptions = ['1', '2', '3', '4'];
+    if (!validOptions.includes(languages)) {
+        return {
+            isValid: false,
+            errorMessage: "Noto'g'ri tanlov"
         };
     }
 
@@ -140,44 +133,94 @@ export const validatePlanningCenter = (value) => {
 };
 
 /**
- * Master validation function
- * Validates all form fields and returns consolidated errors
- * 
- * @param {Object} formData - Complete form data object
- * @returns {Object} errors - Object with field names as keys and error messages as values
+ * Validates achievements (Question 7)
+ * This is optional, so always returns valid
+ */
+export const validateAchievements = (achievements) => {
+    // Optional field - always valid
+    return { isValid: true, errorMessage: '' };
+};
+
+/**
+ * Validates foreign universities (Question 8)
+ * This is optional
+ */
+export const validateForeignUniversities = (universities) => {
+    // Optional field - always valid
+    return { isValid: true, errorMessage: '' };
+};
+
+/**
+ * Validates loan interest (Question 9)
+ */
+export const validateLoanInterest = (loanInterest) => {
+    if (loanInterest === null || loanInterest === undefined) {
+        return {
+            isValid: false,
+            errorMessage: "Iltimos, javob bering"
+        };
+    }
+
+    return { isValid: true, errorMessage: '' };
+};
+
+/**
+ * Validates all form fields
+ * Returns an object with errors for each field
  */
 export const validateAllFields = (formData) => {
     const errors = {};
 
-    const nameValidation = validateFullName(formData.fullName);
+    // Q1: Name
+    const nameValidation = validateName(formData.name);
     if (!nameValidation.isValid) {
-        errors.fullName = nameValidation.errorMessage;
+        errors.name = nameValidation.errorMessage;
     }
 
-    const ageValidation = validateAge(formData.age);
-    if (!ageValidation.isValid) {
-        errors.age = ageValidation.errorMessage;
+    // Q2: Center Name
+    const centerNameValidation = validateCenterName(formData.centerName);
+    if (!centerNameValidation.isValid) {
+        errors.centerName = centerNameValidation.errorMessage;
     }
 
-    const phoneValidation = validatePhone(formData.phone);
-    if (!phoneValidation.isValid) {
-        errors.phone = phoneValidation.errorMessage;
+    // Q3: Center Location
+    const locationValidation = validateCenterLocation(formData.centerLocation);
+    if (!locationValidation.isValid) {
+        errors.centerLocation = locationValidation.errorMessage;
     }
 
-    const regionValidation = validateRegion(formData.region);
-    if (!regionValidation.isValid) {
-        errors.region = regionValidation.errorMessage;
+    // Q4: Operating Status
+    const statusValidation = validateOperatingStatus(formData.operatingStatus);
+    if (!statusValidation.isValid) {
+        errors.operatingStatus = statusValidation.errorMessage;
     }
 
-    const districtValidation = validateDistrict(formData.district);
-    if (!districtValidation.isValid) {
-        errors.district = districtValidation.errorMessage;
+    // Q5: Student Count
+    const studentCountValidation = validateStudentCount(formData.studentCount);
+    if (!studentCountValidation.isValid) {
+        errors.studentCount = studentCountValidation.errorMessage;
     }
 
-    const planningValidation = validatePlanningCenter(formData.planningCenter);
-    if (!planningValidation.isValid) {
-        errors.planningCenter = planningValidation.errorMessage;
+    // Q6: Languages Offered
+    const languagesValidation = validateLanguagesOffered(formData.languagesOffered);
+    if (!languagesValidation.isValid) {
+        errors.languagesOffered = languagesValidation.errorMessage;
     }
 
-    return errors;
+    // Q7: Achievements (optional)
+    // No validation needed
+
+    // Q8: Foreign Universities (optional)
+    // No validation needed
+
+    // Q9: Loan Interest
+    const loanValidation = validateLoanInterest(formData.loanInterest);
+    if (!loanValidation.isValid) {
+        errors.loanInterest = loanValidation.errorMessage;
+    }
+
+    return {
+        isValid: Object.keys(errors).length === 0,
+        errors
+    };
 };
