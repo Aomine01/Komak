@@ -171,10 +171,7 @@ function App() {
 
             window.scrollTo({ top: 0, behavior: 'smooth' });
 
-            // Redirect to Telegram after 2 seconds
-            setTimeout(() => {
-                window.location.href = 'https://t.me/komak_loyihasi';
-            }, 2000);
+            // Success - no redirect
 
         } catch (error) {
             console.error('Submission error:', error);
@@ -558,7 +555,7 @@ function App() {
                     <div className="flex flex-col md:flex-row items-center gap-6 text-sm text-slate-600">
                         <div className="flex items-center gap-2">
                             <span className="material-symbols-outlined text-primary text-[20px]">call</span>
-                            <span className="font-medium">+998 71 200 00 00</span>
+                            <span className="font-medium">+998(77)489-16-31</span>
                         </div>
                         <a
                             href="https://t.me/komak_loyihasi"

@@ -2,7 +2,7 @@
 export const translations = {
     uz: {
         // Hero
-        heroTitle: "KOMAK bu imkoniyat",
+        heroTitle: "KO'MAK+ birga rivojlanamiz",
 
         // Form
         formTitle: "O'quv Markazi So'rovnomasi",
@@ -57,7 +57,7 @@ export const translations = {
 
     ru: {
         // Hero
-        heroTitle: "KOMAK - это возможность",
+        heroTitle: "KO'MAK+ развиваемся вместе",
 
         // Form
         formTitle: "Опрос учебного центра",
@@ -112,7 +112,7 @@ export const translations = {
 
     en: {
         // Hero
-        heroTitle: "KOMAK is an opportunity",
+        heroTitle: "KO'MAK+ growing together",
 
         // Form
         formTitle: "Educational Center Survey",
