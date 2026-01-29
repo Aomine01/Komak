@@ -528,7 +528,7 @@ function App() {
                                             disabled={isSubmitting}
                                             className={`toggle-btn ${formData.loanInterest === true ? 'active' : ''}`}
                                         >
-                                            {t.q9_yes}
+                                            {t.q10_yes}
                                         </button>
                                         <button
                                             type="button"
@@ -536,7 +536,7 @@ function App() {
                                             disabled={isSubmitting}
                                             className={`toggle-btn ${formData.loanInterest === false ? 'active' : ''}`}
                                         >
-                                            {t.q9_no}
+                                            {t.q10_no}
                                         </button>
                                     </div>
                                     {formErrors.loanInterest && <p className="error-text">{formErrors.loanInterest}</p>}
