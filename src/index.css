@@ -117,8 +117,8 @@
 
   .toggle-btn.active {
     @apply shadow-lg;
-    background-color: var(--primary);
-    color: white;
+    background-color: var(--primary) !important;
+    color: white !important;
   }
 
   .toggle-btn:hover:not(.active) {
