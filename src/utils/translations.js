@@ -38,6 +38,7 @@ export const translations = {
 
         q10_loan: "Qo'shimcha ssuda olishni xohlagan bo'larmidingiz?",
         q10_yes: "HA",
+        q10_no: "YO'Q",
 
         // Submit
         submitButton: "So'rovnoma Yuborish",
