@@ -517,7 +517,7 @@ function App() {
                                 {/* Question 10: Loan Interest */}
                                 <div className="space-y-6">
                                     <div className="section-header">
-                                        <span className="material-symbols-outlined">attach_money</span>
+                                        <span className="material-symbols-outlined">payments</span>
                                         <h3>10. {t.q10_loan}</h3>
                                     </div>
 
