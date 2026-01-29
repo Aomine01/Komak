@@ -137,6 +137,7 @@ function App() {
                         name: formData.name.trim(),
                         center_name: formData.centerName.trim(),
                         center_location: formData.centerLocation,
+                        district: formData.district.trim(),
                         operating_status: formData.operatingStatus,
                         student_count: parseInt(formData.studentCount, 10),
                         languages_offered: formData.languagesOffered,
@@ -161,6 +162,7 @@ function App() {
                 name: '',
                 centerName: '',
                 centerLocation: '',
+                district: '',
                 operatingStatus: '',
                 studentCount: '',
                 languagesOffered: '',
@@ -363,11 +365,34 @@ function App() {
 
                                 <hr className="border-slate-100" />
 
-                                {/* Question 4: Operating Status */}
+                                {/* Question 4: District */}
+                                <div className="space-y-6">
+                                    <div className="section-header">
+                                        <span className="material-symbols-outlined">location_city</span>
+                                        <h3>4. {t.q4_district}</h3>
+                                    </div>
+
+                                    <div className="flex flex-col gap-2">
+                                        <input
+                                            type="text"
+                                            name="district"
+                                            value={formData.district}
+                                            onChange={handleInputChange}
+                                            disabled={isSubmitting}
+                                            className={`input-field ${formErrors.district ? 'border-red-500' : ''}`}
+                                            placeholder={t.q4_districtPlaceholder}
+                                        />
+                                        {formErrors.district && <p className="error-text">{formErrors.district}</p>}
+                                    </div>
+                                </div>
+
+                                <hr className="border-slate-100" />
+
+                                {/* Question 5: Operating Status */}
                                 <div className="space-y-6">
                                     <div className="section-header">
                                         <span className="material-symbols-outlined">store</span>
-                                        <h3>4. {t.q4_status}</h3>
+                                        <h3>5. {t.q5_operatingStatus}</h3>
                                     </div>
 
                                     <div className="flex flex-col gap-2">
@@ -389,11 +414,11 @@ function App() {
 
                                 <hr className="border-slate-100" />
 
-                                {/* Question 5: Student Count */}
+                                {/* Question 6: Student Count */}
                                 <div className="space-y-6">
                                     <div className="section-header">
                                         <span className="material-symbols-outlined">groups</span>
-                                        <h3>5. {t.q5_students}</h3>
+                                        <h3>6. {t.q6_studentCount}</h3>
                                     </div>
 
                                     <div className="flex flex-col gap-2">
@@ -413,11 +438,11 @@ function App() {
 
                                 <hr className="border-slate-100" />
 
-                                {/* Question 6: Languages Offered */}
+                                {/* Question 7: Languages Offered */}
                                 <div className="space-y-6">
                                     <div className="section-header">
                                         <span className="material-symbols-outlined">translate</span>
-                                        <h3>6. {t.q6_languages}</h3>
+                                        <h3>7. {t.q7_languages}</h3>
                                     </div>
 
                                     <div className="flex flex-col gap-2">
@@ -439,11 +464,11 @@ function App() {
 
                                 <hr className="border-slate-100" />
 
-                                {/* Question 7: Achievements */}
+                                {/* Question 8: Student Achievements */}
                                 <div className="space-y-6">
                                     <div className="section-header">
                                         <span className="material-symbols-outlined">emoji_events</span>
-                                        <h3>7. {t.q7_achievements}</h3>
+                                        <h3>8. {t.q8_achievements}</h3>
                                     </div>
 
                                     <p className="text-sm text-slate-500 mb-4">{t.q7_description}</p>
@@ -466,11 +491,11 @@ function App() {
 
                                 <hr className="border-slate-100" />
 
-                                {/* Question 8: Foreign Universities */}
+                                {/* Question 9: Foreign Universities */}
                                 <div className="space-y-6">
                                     <div className="section-header">
                                         <span className="material-symbols-outlined">public</span>
-                                        <h3>8. {t.q8_universities}</h3>
+                                        <h3>9. {t.q9_universities}</h3>
                                     </div>
 
                                     <div className="flex flex-col gap-2">
@@ -489,11 +514,11 @@ function App() {
 
                                 <hr className="border-slate-100" />
 
-                                {/* Question 9: Loan Interest */}
+                                {/* Question 10: Loan Interest */}
                                 <div className="space-y-6">
                                     <div className="section-header">
                                         <span className="material-symbols-outlined">attach_money</span>
-                                        <h3>9. {t.q9_loan}</h3>
+                                        <h3>10. {t.q10_loan}</h3>
                                     </div>
 
                                     <div className="toggle-group">

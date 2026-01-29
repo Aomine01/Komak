@@ -60,6 +60,23 @@ export const validateCenterLocation = (location) => {
 };
 
 /**
+ * Validates district (optional text field)
+ */
+export const validateDistrict = (district) => {
+    // District is optional, so empty is acceptable
+    if (!district || district.trim() === '') {
+        return { isValid: true, errorMessage: '' };
+    }
+
+    // If provided, minimum length is 2 characters
+    if (district.trim().length < 2) {
+        return { isValid: false, errorMessage: 'Iltimos, kamida 2 ta harf kiriting' };
+    }
+
+    return { isValid: true, errorMessage: '' };
+};
+
+/**
  * Validates operating status (Question 4)
  */
 export const validateOperatingStatus = (status) => {
@@ -171,52 +188,45 @@ export const validateLoanInterest = (loanInterest) => {
 export const validateAllFields = (formData) => {
     const errors = {};
 
-    // Q1: Name
+    // Validate each field
     const nameValidation = validateName(formData.name);
     if (!nameValidation.isValid) {
         errors.name = nameValidation.errorMessage;
     }
 
-    // Q2: Center Name
     const centerNameValidation = validateCenterName(formData.centerName);
     if (!centerNameValidation.isValid) {
         errors.centerName = centerNameValidation.errorMessage;
     }
 
-    // Q3: Center Location
-    const locationValidation = validateCenterLocation(formData.centerLocation);
-    if (!locationValidation.isValid) {
-        errors.centerLocation = locationValidation.errorMessage;
+    const centerLocationValidation = validateCenterLocation(formData.centerLocation);
+    if (!centerLocationValidation.isValid) {
+        errors.centerLocation = centerLocationValidation.errorMessage;
     }
 
-    // Q4: Operating Status
-    const statusValidation = validateOperatingStatus(formData.operatingStatus);
-    if (!statusValidation.isValid) {
-        errors.operatingStatus = statusValidation.errorMessage;
+    const districtValidation = validateDistrict(formData.district);
+    if (!districtValidation.isValid) {
+        errors.district = districtValidation.errorMessage;
     }
 
-    // Q5: Student Count
+    const operatingStatusValidation = validateOperatingStatus(formData.operatingStatus);
+    if (!operatingStatusValidation.isValid) {
+        errors.operatingStatus = operatingStatusValidation.errorMessage;
+    }
+
     const studentCountValidation = validateStudentCount(formData.studentCount);
     if (!studentCountValidation.isValid) {
         errors.studentCount = studentCountValidation.errorMessage;
     }
 
-    // Q6: Languages Offered
-    const languagesValidation = validateLanguagesOffered(formData.languagesOffered);
-    if (!languagesValidation.isValid) {
-        errors.languagesOffered = languagesValidation.errorMessage;
+    const languagesOfferedValidation = validateLanguagesOffered(formData.languagesOffered);
+    if (!languagesOfferedValidation.isValid) {
+        errors.languagesOffered = languagesOfferedValidation.errorMessage;
     }
 
-    // Q7: Achievements (optional)
-    // No validation needed
-
-    // Q8: Foreign Universities (optional)
-    // No validation needed
-
-    // Q9: Loan Interest
-    const loanValidation = validateLoanInterest(formData.loanInterest);
-    if (!loanValidation.isValid) {
-        errors.loanInterest = loanValidation.errorMessage;
+    const loanInterestValidation = validateLoanInterest(formData.loanInterest);
+    if (!loanInterestValidation.isValid) {
+        errors.loanInterest = loanInterestValidation.errorMessage;
     }
 
     return {

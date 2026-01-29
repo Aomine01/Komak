@@ -16,27 +16,28 @@ export const translations = {
         q2_placeholder: "Markaz nomini kiriting",
 
         q3_location: "O'quv markazingiz joylashgan hudud",
-        q3_placeholder: "Hududni tanlang",
+        q3_locationPlaceholder: "Hududni tanlang",
+        q4_district: "Tuman",
+        q4_districtPlaceholder: "Tumanni kiriting",
 
-        q4_status: "O'quv markazingiz hozirda faoliyat ko'rsatyaptimi?",
-        q4_ha: "HA",
-        q4_jarayonda: "Jarayonda (ta'mirlanyapti)",
-        q4_yoq: "YO'Q",
+        q5_operatingStatus: "O'quv markazingiz hozirda faoliyat ko'rsatyaptimi?",
+        q5_ha: "HA",
+        q5_jarayonda: "Jarayonda (ta'mirlanyapti)",
+        q5_yoq: "YO'Q",
 
-        q5_students: "Hozirdagi mavjud o'quvchilar soni",
-        q5_placeholder: "Masalan: 150",
+        q6_studentCount: "Hozirdagi mavjud o'quvchilar soni",
+        q6_studentPlaceholder: "Masalan: 150",
 
-        q6_languages: "Nechta xorijiy tillarni o'rgatyapsiz?",
+        q7_languages: "Nechta xorijiy tillarni o'rgatyapsiz?",
 
-        q7_achievements: "Asosiy o'quvchilaringiz yutuqlari",
-        q7_description: "Barcha tegishli yutuqlarni belgilang",
+        q8_achievements: "Asosiy o'quvchilaringiz yutuqlari",
+        q8_description: "Barcha tegishli yutuqlarni belgilang",
 
-        q8_universities: "Chet universitetlarga topshirgan o'quvchilaringiz bormi? Qaysi davlatga?",
-        q8_placeholder: "Masalan: AQSH, Janubiy Koreya...",
+        q9_universities: "Chet universitetlarga topshirgan o'quvchilaringiz bormi? Qaysi davlatga?",
+        q9_placeholder: "Masalan: AQSH, Janubiy Koreya...",
 
-        q9_loan: "Qo'shimcha ssuda olishni xohlagan bo'larmidingiz?",
-        q9_yes: "HA",
-        q9_no: "YO'Q",
+        q10_loan: "Qo'shimcha ssuda olishni xohlagan bo'larmidingiz?",
+        q10_yes: "HA",
 
         // Submit
         submitButton: "So'rovnoma Yuborish",
@@ -70,13 +71,29 @@ export const translations = {
         q2_centerName: "Название вашего учебного центра",
         q2_placeholder: "Введите название центра",
 
-        q3_location: "Регион расположения центра",
-        q3_placeholder: "Выберите регион",
+        q3_location: "Регион расположения вашего учебного центра",
+        q3_locationPlaceholder: "Выберите регион",
+        q4_district: "Район",
+        q4_districtPlaceholder: "Введите район",
+        q5_operatingStatus: "Ваш учебный центр в настоящее время работает?",
+        q5_ha: "ДА",
+        q5_jarayonda: "В процессе (ремонтируется)",
+        q5_yoq: "НЕТ",
 
-        q4_status: "Ваш учебный центр в настоящее время работает?",
-        q4_ha: "ДА",
-        q4_jarayonda: "В процессе (ремонтируется)",
-        q4_yoq: "НЕТ",
+        q6_studentCount: "Текущее количество студентов",
+        q6_studentPlaceholder: "Например: 150",
+
+        q7_languages: "Сколько иностранных языков вы преподаете?",
+
+        q8_achievements: "Основные достижения ваших студентов",
+        q8_description: "Отметьте все подходящие достижения",
+
+        q9_universities: "Есть ли у вас студенты, поступившие в зарубежные университеты? В какие страны?",
+        q9_placeholder: "Например: США, Южная Корея...",
+
+        q10_loan: "Хотели бы вы получить дополнительный кредит?",
+        q10_yes: "ДА",
+        q10_no: "НЕТ",
 
         q5_students: "Текущее количество студентов",
         q5_placeholder: "Например: 150",
@@ -125,13 +142,29 @@ export const translations = {
         q2_centerName: "Your Educational Center Name",
         q2_placeholder: "Enter center name",
 
-        q3_location: "Center Location Region",
-        q3_placeholder: "Select region",
+        q3_location: "Region where your educational center is located",
+        q3_locationPlaceholder: "Select region",
+        q4_district: "District",
+        q4_districtPlaceholder: "Enter district",
+        q5_operatingStatus: "Is your educational center currently operating?",
+        q5_ha: "YES",
+        q5_jarayonda: "In Progress (Under renovation)",
+        q5_yoq: "NO",
 
-        q4_status: "Is your educational center currently operating?",
-        q4_ha: "YES",
-        q4_jarayonda: "In Progress (Under renovation)",
-        q4_yoq: "NO",
+        q6_studentCount: "Current number of students",
+        q6_studentPlaceholder: "For example: 150",
+
+        q7_languages: "How many foreign languages do you teach?",
+
+        q8_achievements: "Key achievements of your students",
+        q8_description: "Check all applicable achievements",
+
+        q9_universities: "Do you have students admitted to foreign universities? Which countries?",
+        q9_placeholder: "For example: USA, South Korea...",
+
+        q10_loan: "Would you like to receive additional financing?",
+        q10_yes: "YES",
+        q10_no: "NO",
 
         q5_students: "Current Number of Students",
         q5_placeholder: "Example: 150",
