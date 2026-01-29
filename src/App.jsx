@@ -284,9 +284,9 @@ function App() {
 
                 {/* Form Section */}
                 <section className="max-w-4xl mx-auto">
-                    <div className="mb-8 text-center md:text-left">
-                        <h2 className="text-primary text-3xl font-extrabold tracking-tight">{t.formTitle}</h2>
-                        <p className="text-slate-500 mt-2">{t.formSubtitle}</p>
+                    <div className="mb-10 text-center md:text-left">
+                        <h2 className="text-primary text-4xl md:text-5xl font-black tracking-tight leading-tight mb-4">{t.formTitle}</h2>
+                        <p className="text-slate-600 text-base md:text-lg">{t.formSubtitle}</p>
                     </div>
 
                     <div className="form-card">

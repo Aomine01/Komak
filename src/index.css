@@ -63,7 +63,7 @@
 
   /* Hero Section - Dark Green Background */
   .hero-section {
-    @apply px-8 md:px-12 py-20 md:py-24 rounded-3xl text-center flex items-center justify-center;
+    @apply px-8 md:px-12 py-24 md:py-32 rounded-3xl text-center flex items-center justify-center;
     background: rgb(14 59 42);
   }
 
