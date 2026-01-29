@@ -106,21 +106,23 @@
 
   /* Toggle Button Group */
   .toggle-group {
-    @apply flex bg-slate-200 p-1 rounded-xl w-32;
+    @apply flex bg-slate-200 p-1 rounded-xl w-40;
   }
 
   .toggle-btn {
-    @apply flex-1 py-2 text-xs font-bold rounded-lg transition-all cursor-pointer;
+    @apply flex-1 py-3 px-4 text-sm font-bold rounded-lg transition-all cursor-pointer;
+    background-color: transparent;
+    color: #64748b;
   }
 
   .toggle-btn.active {
-    @apply shadow-sm;
+    @apply shadow-lg;
     background-color: var(--primary);
     color: white;
   }
 
-  .toggle-btn:not(.active) {
-    @apply text-slate-500 hover:bg-slate-300;
+  .toggle-btn:hover:not(.active) {
+    background-color: rgba(14, 59, 42, 0.1);
   }
 
   /* Pill Button (Direction Selector) */
