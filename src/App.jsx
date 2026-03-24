@@ -2,7 +2,7 @@
  * KO'MAK+ LOYIHASI - EDUCATIONAL CENTER SURVEY
  * 
  * Features:
- * - 9-question survey for educational centers
+ * - 11-question survey for educational centers
  * - Multi-language support (UZ/RU/EN)
  * - Modern form layout with validation
  * - Telegram redirect after submission
@@ -12,7 +12,7 @@ import { useState, useEffect } from 'react';
 import { supabase } from './supabaseClient';
 import { validateAllFields } from './utils/validation';
 import { checkCooldown, setCooldown } from './utils/cooldown';
-import { REGIONS, OPERATING_STATUS, FOREIGN_LANGUAGES, ACHIEVEMENTS } from './data/formOptions';
+import { REGIONS, OPERATING_STATUS, TRAINING_FORMAT } from './data/formOptions';
 import { translations } from './utils/translations';
 
 function App() {
@@ -21,15 +21,18 @@ function App() {
     const t = translations[language];
 
     const [formData, setFormData] = useState({
-        name: '',                    // Q1: Ismingiz
-        centerName: '',              // Q2: O'quv markazingiz nomi
-        centerLocation: '',          // Q3: Joylashgan hudud
-        operatingStatus: '',         // Q4: Faoliyat ko'rsatyaptimi (HA/Jarayonda/YO'Q)
+        name: '',                    // Q1: Ism Familiyangiz
+        centerLocation: '',          // Q2: O'quv markazi hududi
+        operatingStatus: '',         // Q3: Faoliyat ko'rsatyaptimi
+        operatingStartDate: '',      // Q3.1: Qachon boshlaydi
+        centerName: '',              // Q4: Markaz nomi
         studentCount: '',            // Q5: O'quvchilar soni
-        languagesOffered: '',        // Q6: Nechta xorijiy til
-        achievements: [],            // Q7: O'quvchilar yutuqlari (multiple)
-        foreignUniversities: '',     // Q8: Chet universitetlar
-        loanInterest: null          // Q9: Qo'shimcha ssuda (true/false)
+        employeeCount: '',           // Q6: Xodimlar soni
+        problemsFaced: '',           // Q7: Muammolar
+        trainingTopics: '',          // Q8: Trening mavzulari
+        trainingFormat: '',          // Q9: Trening formati
+        mentorPreference: '',        // Q10: Mentor
+        suggestions: ''              // Q11: Takliflar
     });
 
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -77,34 +80,6 @@ function App() {
         }
     };
 
-    const handleAchievementChange = (achievementValue) => {
-        setFormData(prev => {
-            const currentAchievements = prev.achievements;
-            const isSelected = currentAchievements.includes(achievementValue);
-
-            return {
-                ...prev,
-                achievements: isSelected
-                    ? currentAchievements.filter(a => a !== achievementValue)
-                    : [...currentAchievements, achievementValue]
-            };
-        });
-    };
-
-    const handleLoanChange = (value) => {
-        setFormData(prev => ({
-            ...prev,
-            loanInterest: value
-        }));
-
-        if (formErrors.loanInterest) {
-            setFormErrors(prev => ({
-                ...prev,
-                loanInterest: ''
-            }));
-        }
-    };
-
     const handleSubmit = async (e) => {
         e.preventDefault();
         setSubmitStatus(null);
@@ -130,22 +105,24 @@ function App() {
         setFormErrors({});
 
         try {
+            const payload = {
+                name: formData.name.trim(),
+                center_location: formData.centerLocation,
+                operating_status: formData.operatingStatus,
+                operating_start_date: formData.operatingStatus === 'yoq' ? formData.operatingStartDate.trim() : null,
+                center_name: formData.centerName.trim(),
+                student_count: parseInt(formData.studentCount, 10),
+                employee_count: parseInt(formData.employeeCount, 10),
+                problems_faced: formData.problemsFaced.trim(),
+                training_topics: formData.trainingTopics.trim(),
+                training_format: formData.trainingFormat,
+                mentor_preference: formData.mentorPreference.trim(),
+                suggestions: formData.suggestions.trim()
+            };
+
             const { data, error } = await supabase
                 .from('center_survey')
-                .insert([
-                    {
-                        name: formData.name.trim(),
-                        center_name: formData.centerName.trim(),
-                        center_location: formData.centerLocation,
-                        district: formData.district.trim(),
-                        operating_status: formData.operatingStatus,
-                        student_count: parseInt(formData.studentCount, 10),
-                        languages_offered: formData.languagesOffered,
-                        achievements: formData.achievements,
-                        foreign_universities: formData.foreignUniversities.trim(),
-                        loan_interest: formData.loanInterest
-                    }
-                ])
+                .insert([payload])
                 .select();
 
             if (error) {
@@ -160,20 +137,20 @@ function App() {
             // Reset form
             setFormData({
                 name: '',
-                centerName: '',
                 centerLocation: '',
-                district: '',
                 operatingStatus: '',
+                operatingStartDate: '',
+                centerName: '',
                 studentCount: '',
-                languagesOffered: '',
-                achievements: [],
-                foreignUniversities: '',
-                loanInterest: null
+                employeeCount: '',
+                problemsFaced: '',
+                trainingTopics: '',
+                trainingFormat: '',
+                mentorPreference: '',
+                suggestions: ''
             });
 
             window.scrollTo({ top: 0, behavior: 'smooth' });
-
-            // Success - no redirect
 
         } catch (error) {
             console.error('Submission error:', error);
@@ -190,7 +167,6 @@ function App() {
     return (
         <div className="min-h-screen bg-background-light flex flex-col">
 
-
             {/* Header */}
             <header className="header-sticky px-6 md:px-20 lg:px-40 py-4">
                 <div className="flex items-center justify-between max-w-[1200px] mx-auto">
@@ -200,33 +176,18 @@ function App() {
 
                     {/* Language Switcher */}
                     <div className="flex gap-2">
-                        <button
-                            onClick={() => setLanguage('uz')}
-                            className={`px-4 py-2 rounded-lg text-sm font-bold transition-all ${language === 'uz'
-                                ? 'bg-primary text-white'
-                                : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-                                }`}
-                        >
-                            UZ
-                        </button>
-                        <button
-                            onClick={() => setLanguage('ru')}
-                            className={`px-4 py-2 rounded-lg text-sm font-bold transition-all ${language === 'ru'
-                                ? 'bg-primary text-white'
-                                : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-                                }`}
-                        >
-                            RU
-                        </button>
-                        <button
-                            onClick={() => setLanguage('en')}
-                            className={`px-4 py-2 rounded-lg text-sm font-bold transition-all ${language === 'en'
-                                ? 'bg-primary text-white'
-                                : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-                                }`}
-                        >
-                            EN
-                        </button>
+                        {['uz', 'ru', 'en'].map((lang) => (
+                            <button
+                                key={lang}
+                                onClick={() => setLanguage(lang)}
+                                className={`px-4 py-2 rounded-lg text-sm font-bold transition-all ${language === lang
+                                    ? 'bg-primary text-white'
+                                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                                    }`}
+                            >
+                                {lang.toUpperCase()}
+                            </button>
+                        ))}
                     </div>
                 </div>
             </header>
@@ -316,34 +277,11 @@ function App() {
 
                                 <hr className="border-slate-100" />
 
-                                {/* Question 2: Center Name */}
-                                <div className="space-y-6">
-                                    <div className="section-header">
-                                        <span className="material-symbols-outlined">school</span>
-                                        <h3>2. {t.q2_centerName}</h3>
-                                    </div>
-
-                                    <div className="flex flex-col gap-2">
-                                        <input
-                                            type="text"
-                                            name="centerName"
-                                            value={formData.centerName}
-                                            onChange={handleInputChange}
-                                            disabled={isSubmitting}
-                                            className={`input-field ${formErrors.centerName ? 'border-red-500' : ''}`}
-                                            placeholder={t.q2_placeholder}
-                                        />
-                                        {formErrors.centerName && <p className="error-text">{formErrors.centerName}</p>}
-                                    </div>
-                                </div>
-
-                                <hr className="border-slate-100" />
-
-                                {/* Question 3: Center Location */}
+                                {/* Question 2: Location */}
                                 <div className="space-y-6">
                                     <div className="section-header">
                                         <span className="material-symbols-outlined">location_on</span>
-                                        <h3>3. {t.q3_location}</h3>
+                                        <h3>2. {t.q2_location}</h3>
                                     </div>
 
                                     <div className="flex flex-col gap-2">
@@ -354,7 +292,7 @@ function App() {
                                             disabled={isSubmitting}
                                             className={`input-field ${formErrors.centerLocation ? 'border-red-500' : ''}`}
                                         >
-                                            <option value="">{t.q3_placeholder}</option>
+                                            <option value="">{t.q2_locationPlaceholder}</option>
                                             {REGIONS.map(region => (
                                                 <option key={region} value={region}>{region}</option>
                                             ))}
@@ -365,34 +303,11 @@ function App() {
 
                                 <hr className="border-slate-100" />
 
-                                {/* Question 4: District */}
-                                <div className="space-y-6">
-                                    <div className="section-header">
-                                        <span className="material-symbols-outlined">location_city</span>
-                                        <h3>4. {t.q4_district}</h3>
-                                    </div>
-
-                                    <div className="flex flex-col gap-2">
-                                        <input
-                                            type="text"
-                                            name="district"
-                                            value={formData.district}
-                                            onChange={handleInputChange}
-                                            disabled={isSubmitting}
-                                            className={`input-field ${formErrors.district ? 'border-red-500' : ''}`}
-                                            placeholder={t.q4_districtPlaceholder}
-                                        />
-                                        {formErrors.district && <p className="error-text">{formErrors.district}</p>}
-                                    </div>
-                                </div>
-
-                                <hr className="border-slate-100" />
-
-                                {/* Question 5: Operating Status */}
+                                {/* Question 3: Operating Status */}
                                 <div className="space-y-6">
                                     <div className="section-header">
                                         <span className="material-symbols-outlined">store</span>
-                                        <h3>5. {t.q5_operatingStatus}</h3>
+                                        <h3>3. {t.q3_operatingStatus}</h3>
                                     </div>
 
                                     <div className="flex flex-col gap-2">
@@ -405,20 +320,64 @@ function App() {
                                         >
                                             <option value="">Tanlang</option>
                                             {OPERATING_STATUS.map(status => (
-                                                <option key={status.value} value={status.value}>{status.label}</option>
+                                                <option key={status.value} value={status.value}>
+                                                    {language === 'uz' ? status.label : (language === 'ru' ? t[`q3_${status.value}`] : t[`q3_${status.value}`])}
+                                                </option>
                                             ))}
                                         </select>
                                         {formErrors.operatingStatus && <p className="error-text">{formErrors.operatingStatus}</p>}
+                                    </div>
+
+                                    {/* Sub-question if No */}
+                                    {formData.operatingStatus === 'yoq' && (
+                                        <div className="pl-6 border-l-2 border-primary mt-4 space-y-4 animate-fadeIn">
+                                            <p className="text-sm font-medium text-slate-700">{t.q3_startDate}</p>
+                                            <div className="flex flex-col gap-2">
+                                                <input
+                                                    type="text"
+                                                    name="operatingStartDate"
+                                                    value={formData.operatingStartDate}
+                                                    onChange={handleInputChange}
+                                                    disabled={isSubmitting}
+                                                    className={`input-field ${formErrors.operatingStartDate ? 'border-red-500' : ''}`}
+                                                    placeholder={t.q3_startDatePlaceholder}
+                                                />
+                                                {formErrors.operatingStartDate && <p className="error-text">{formErrors.operatingStartDate}</p>}
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+
+                                <hr className="border-slate-100" />
+
+                                {/* Question 4: Center Name */}
+                                <div className="space-y-6">
+                                    <div className="section-header">
+                                        <span className="material-symbols-outlined">school</span>
+                                        <h3>4. {t.q4_centerName}</h3>
+                                    </div>
+
+                                    <div className="flex flex-col gap-2">
+                                        <input
+                                            type="text"
+                                            name="centerName"
+                                            value={formData.centerName}
+                                            onChange={handleInputChange}
+                                            disabled={isSubmitting}
+                                            className={`input-field ${formErrors.centerName ? 'border-red-500' : ''}`}
+                                            placeholder={t.q4_placeholder}
+                                        />
+                                        {formErrors.centerName && <p className="error-text">{formErrors.centerName}</p>}
                                     </div>
                                 </div>
 
                                 <hr className="border-slate-100" />
 
-                                {/* Question 6: Student Count */}
+                                {/* Question 5: Student Count */}
                                 <div className="space-y-6">
                                     <div className="section-header">
                                         <span className="material-symbols-outlined">groups</span>
-                                        <h3>6. {t.q6_studentCount}</h3>
+                                        <h3>5. {t.q5_studentCount}</h3>
                                     </div>
 
                                     <div className="flex flex-col gap-2">
@@ -430,7 +389,7 @@ function App() {
                                             disabled={isSubmitting}
                                             min="0"
                                             className={`input-field ${formErrors.studentCount ? 'border-red-500' : ''}`}
-                                            placeholder={t.q5_placeholder}
+                                            placeholder={t.q5_studentPlaceholder}
                                         />
                                         {formErrors.studentCount && <p className="error-text">{formErrors.studentCount}</p>}
                                     </div>
@@ -438,108 +397,144 @@ function App() {
 
                                 <hr className="border-slate-100" />
 
-                                {/* Question 7: Languages Offered */}
+                                {/* Question 6: Employee Count */}
                                 <div className="space-y-6">
                                     <div className="section-header">
-                                        <span className="material-symbols-outlined">translate</span>
-                                        <h3>7. {t.q7_languages}</h3>
+                                        <span className="material-symbols-outlined">badge</span>
+                                        <h3>6. {t.q6_employeeCount}</h3>
                                     </div>
 
                                     <div className="flex flex-col gap-2">
-                                        <select
-                                            name="languagesOffered"
-                                            value={formData.languagesOffered}
+                                        <input
+                                            type="number"
+                                            name="employeeCount"
+                                            value={formData.employeeCount}
                                             onChange={handleInputChange}
                                             disabled={isSubmitting}
-                                            className={`input-field ${formErrors.languagesOffered ? 'border-red-500' : ''}`}
-                                        >
-                                            <option value="">Tanlang</option>
-                                            {FOREIGN_LANGUAGES.map(lang => (
-                                                <option key={lang.value} value={lang.value}>{lang.label}</option>
-                                            ))}
-                                        </select>
-                                        {formErrors.languagesOffered && <p className="error-text">{formErrors.languagesOffered}</p>}
+                                            min="0"
+                                            className={`input-field ${formErrors.employeeCount ? 'border-red-500' : ''}`}
+                                            placeholder={t.q6_employeePlaceholder}
+                                        />
+                                        {formErrors.employeeCount && <p className="error-text">{formErrors.employeeCount}</p>}
                                     </div>
                                 </div>
 
                                 <hr className="border-slate-100" />
 
-                                {/* Question 8: Student Achievements */}
+                                {/* Question 7: Problems Faced */}
                                 <div className="space-y-6">
                                     <div className="section-header">
-                                        <span className="material-symbols-outlined">emoji_events</span>
-                                        <h3>8. {t.q8_achievements}</h3>
+                                        <span className="material-symbols-outlined">report_problem</span>
+                                        <h3>7. {t.q7_problemsFaced}</h3>
                                     </div>
 
-                                    <p className="text-sm text-slate-500 mb-4">{t.q7_description}</p>
-
-                                    <div className="space-y-3">
-                                        {ACHIEVEMENTS.map(achievement => (
-                                            <label key={achievement.value} className="flex items-center gap-3 cursor-pointer p-3 rounded-lg hover:bg-slate-50 transition-colors">
-                                                <input
-                                                    type="checkbox"
-                                                    checked={formData.achievements.includes(achievement.value)}
-                                                    onChange={() => handleAchievementChange(achievement.value)}
-                                                    disabled={isSubmitting}
-                                                    className="w-5 h-5 text-primary border-slate-300 rounded focus:ring-2 focus:ring-primary/20 cursor-pointer"
-                                                />
-                                                <span className="text-sm font-medium text-slate-700">{achievement.label}</span>
-                                            </label>
-                                        ))}
+                                    <div className="flex flex-col gap-2">
+                                        <textarea
+                                            name="problemsFaced"
+                                            value={formData.problemsFaced}
+                                            onChange={handleInputChange}
+                                            disabled={isSubmitting}
+                                            rows="3"
+                                            className={`input-field min-h-[100px] resize-y p-3 ${formErrors.problemsFaced ? 'border-red-500' : ''}`}
+                                            placeholder={t.q7_problemsPlaceholder}
+                                        />
+                                        {formErrors.problemsFaced && <p className="error-text">{formErrors.problemsFaced}</p>}
                                     </div>
                                 </div>
 
                                 <hr className="border-slate-100" />
 
-                                {/* Question 9: Foreign Universities */}
+                                {/* Question 8: Training Topics */}
                                 <div className="space-y-6">
                                     <div className="section-header">
-                                        <span className="material-symbols-outlined">public</span>
-                                        <h3>9. {t.q9_universities}</h3>
+                                        <span className="material-symbols-outlined">menu_book</span>
+                                        <h3>8. {t.q8_trainingTopics}</h3>
                                     </div>
 
                                     <div className="flex flex-col gap-2">
                                         <input
                                             type="text"
-                                            name="foreignUniversities"
-                                            value={formData.foreignUniversities}
+                                            name="trainingTopics"
+                                            value={formData.trainingTopics}
                                             onChange={handleInputChange}
                                             disabled={isSubmitting}
-                                            className={`input-field ${formErrors.foreignUniversities ? 'border-red-500' : ''}`}
-                                            placeholder={t.q8_placeholder}
+                                            className={`input-field ${formErrors.trainingTopics ? 'border-red-500' : ''}`}
+                                            placeholder={t.q8_trainingPlaceholder}
                                         />
-                                        {formErrors.foreignUniversities && <p className="error-text">{formErrors.foreignUniversities}</p>}
+                                        {formErrors.trainingTopics && <p className="error-text">{formErrors.trainingTopics}</p>}
                                     </div>
                                 </div>
 
                                 <hr className="border-slate-100" />
 
-                                {/* Question 10: Loan Interest */}
+                                {/* Question 9: Training Format */}
                                 <div className="space-y-6">
                                     <div className="section-header">
-                                        <span className="material-symbols-outlined">account_balance</span>
-                                        <h3>10. {t.q10_loan}</h3>
+                                        <span className="material-symbols-outlined">cast_for_education</span>
+                                        <h3>9. {t.q9_trainingFormat}</h3>
                                     </div>
 
-                                    <div className="toggle-group">
-                                        <button
-                                            type="button"
-                                            onClick={() => handleLoanChange(true)}
+                                    <div className="flex flex-col gap-2">
+                                        <select
+                                            name="trainingFormat"
+                                            value={formData.trainingFormat}
+                                            onChange={handleInputChange}
                                             disabled={isSubmitting}
-                                            className={`toggle-btn ${formData.loanInterest === true ? 'active' : ''}`}
+                                            className={`input-field ${formErrors.trainingFormat ? 'border-red-500' : ''}`}
                                         >
-                                            {t.q10_yes}
-                                        </button>
-                                        <button
-                                            type="button"
-                                            onClick={() => handleLoanChange(false)}
-                                            disabled={isSubmitting}
-                                            className={`toggle-btn ${formData.loanInterest === false ? 'active' : ''}`}
-                                        >
-                                            {t.q10_no}
-                                        </button>
+                                            <option value="">{t.q9_formatPlaceholder}</option>
+                                            {TRAINING_FORMAT.map(format => (
+                                                <option key={format.value} value={format.value}>{format.label}</option>
+                                            ))}
+                                        </select>
+                                        {formErrors.trainingFormat && <p className="error-text">{formErrors.trainingFormat}</p>}
                                     </div>
-                                    {formErrors.loanInterest && <p className="error-text">{formErrors.loanInterest}</p>}
+                                </div>
+
+                                <hr className="border-slate-100" />
+
+                                {/* Question 10: Mentor Preference */}
+                                <div className="space-y-6">
+                                    <div className="section-header">
+                                        <span className="material-symbols-outlined">mindfulness</span>
+                                        <h3>10. {t.q10_mentorPreference}</h3>
+                                    </div>
+
+                                    <div className="flex flex-col gap-2">
+                                        <input
+                                            type="text"
+                                            name="mentorPreference"
+                                            value={formData.mentorPreference}
+                                            onChange={handleInputChange}
+                                            disabled={isSubmitting}
+                                            className={`input-field ${formErrors.mentorPreference ? 'border-red-500' : ''}`}
+                                            placeholder={t.q10_mentorPlaceholder}
+                                        />
+                                        {formErrors.mentorPreference && <p className="error-text">{formErrors.mentorPreference}</p>}
+                                    </div>
+                                </div>
+
+                                <hr className="border-slate-100" />
+
+                                {/* Question 11: Suggestions */}
+                                <div className="space-y-6">
+                                    <div className="section-header">
+                                        <span className="material-symbols-outlined">lightbulb</span>
+                                        <h3>11. {t.q11_suggestions}</h3>
+                                    </div>
+
+                                    <div className="flex flex-col gap-2">
+                                        <textarea
+                                            name="suggestions"
+                                            value={formData.suggestions}
+                                            onChange={handleInputChange}
+                                            disabled={isSubmitting}
+                                            rows="4"
+                                            className={`input-field min-h-[120px] resize-y p-3 ${formErrors.suggestions ? 'border-red-500' : ''}`}
+                                            placeholder={t.q11_suggestionsPlaceholder}
+                                        />
+                                        {formErrors.suggestions && <p className="error-text">{formErrors.suggestions}</p>}
+                                    </div>
                                 </div>
 
                                 {/* Submit Button */}

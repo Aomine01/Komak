@@ -9,36 +9,41 @@ export const translations = {
         formSubtitle: "Iltimos, quyidagi barcha ma'lumotlarni diqqat bilan to'ldiring.",
 
         // Questions
-        q1_name: "Ismingiz",
-        q1_placeholder: "Ismingizni kiriting",
+        q1_name: "Ism Familiyangiz?",
+        q1_placeholder: "Ism familiyangizni kiriting",
 
-        q2_centerName: "O'quv markazingiz nomi",
-        q2_placeholder: "Markaz nomini kiriting",
+        q2_location: "O'quv markazi ochgan hududingiz?",
+        q2_locationPlaceholder: "Hududni tanlang",
 
-        q3_location: "O'quv markazingiz joylashgan hudud",
-        q3_locationPlaceholder: "Hududni tanlang",
-        q4_district: "Tuman",
-        q4_districtPlaceholder: "Tumanni kiriting",
+        q3_operatingStatus: "Markazingiz o'z faoliyatini boshladimi?",
+        q3_ha: "Ha",
+        q3_yoq: "Yo'q",
+        q3_startDate: "Agar Yo'q bo'lsa, qachon faoliyatini boshlaydi?",
+        q3_startDatePlaceholder: "Masalan: 1 oydan so'ng",
 
-        q5_operatingStatus: "O'quv markazingiz hozirda faoliyat ko'rsatyaptimi?",
-        q5_ha: "HA",
-        q5_jarayonda: "Jarayonda (ta'mirlanyapti)",
-        q5_yoq: "YO'Q",
+        q4_centerName: "O'quv markazingiz nomi?",
+        q4_placeholder: "Markaz nomini kiriting",
 
-        q6_studentCount: "Hozirdagi mavjud o'quvchilar soni",
-        q6_studentPlaceholder: "Masalan: 150",
+        q5_studentCount: "Hozirda nechta o'quvchiga ta'lim beryapsiz?",
+        q5_studentPlaceholder: "Masalan: 150",
 
-        q7_languages: "Nechta xorijiy tillarni o'rgatyapsiz?",
+        q6_employeeCount: "Nechta xodim yoki o'qituvchilaringiz bor?",
+        q6_employeePlaceholder: "Masalan: 15",
 
-        q8_achievements: "Asosiy o'quvchilaringiz yutuqlari",
-        q8_description: "Barcha tegishli yutuqlarni belgilang",
+        q7_problemsFaced: "Hozirda faoliyatingizda qaysi bo'limlarda muammolarga duch kelyapsiz?",
+        q7_problemsPlaceholder: "Muammolarni qisqacha yozing",
 
-        q9_universities: "Chet universitetlarga topshirgan o'quvchilaringiz bormi? Qaysi davlatga?",
-        q9_placeholder: "Masalan: AQSH, Janubiy Koreya...",
+        q8_trainingTopics: "Qaysi mavzudagi Traininglar sizga zarur?",
+        q8_trainingPlaceholder: "Masalan: Biznes boshqaruvi, marketing...",
 
-        q10_loan: "Qo'shimcha ssuda olishni xohlagan bo'larmidingiz?",
-        q10_yes: "HA",
-        q10_no: "YO'Q",
+        q9_trainingFormat: "Traininglar uchun qaysi format qulayroq?",
+        q9_formatPlaceholder: "Formatni tanlang",
+
+        q10_mentorPreference: "Sizga qaysi o'quv markazi rahbari “MENTOR” bo'lishini xohlaysiz?",
+        q10_mentorPlaceholder: "Mentor ismini yoki markazini kiriting",
+
+        q11_suggestions: "Sizning rivojlanishingiz va MUKAMMAL RAHBAR bo'lishingiz uchun qanday takliflaringiz bor?",
+        q11_suggestionsPlaceholder: "Takliflaringizni yozib qoldiring",
 
         // Submit
         submitButton: "So'rovnoma Yuborish",
@@ -66,50 +71,41 @@ export const translations = {
         formSubtitle: "Пожалуйста, внимательно заполните всю информацию ниже.",
 
         // Questions
-        q1_name: "Ваше имя",
-        q1_placeholder: "Введите ваше имя",
+        q1_name: "Ваше имя и фамилия?",
+        q1_placeholder: "Введите ваше имя и фамилию",
 
-        q2_centerName: "Название вашего учебного центра",
-        q2_placeholder: "Введите название центра",
+        q2_location: "В каком регионе вы открыли учебный центр?",
+        q2_locationPlaceholder: "Выберите регион",
 
-        q3_location: "Регион расположения вашего учебного центра",
-        q3_locationPlaceholder: "Выберите регион",
-        q4_district: "Район",
-        q4_districtPlaceholder: "Введите район",
-        q5_operatingStatus: "Ваш учебный центр в настоящее время работает?",
-        q5_ha: "ДА",
-        q5_jarayonda: "В процессе (ремонтируется)",
-        q5_yoq: "НЕТ",
+        q3_operatingStatus: "Начал ли ваш центр свою деятельность?",
+        q3_ha: "Да",
+        q3_yoq: "Нет",
+        q3_startDate: "Если нет, когда он начнет свою деятельность?",
+        q3_startDatePlaceholder: "Например: через 1 месяц",
 
-        q6_studentCount: "Текущее количество студентов",
-        q6_studentPlaceholder: "Например: 150",
+        q4_centerName: "Название вашего учебного центра?",
+        q4_placeholder: "Введите название центра",
 
-        q7_languages: "Сколько иностранных языков вы преподаете?",
+        q5_studentCount: "Сколько учеников вы обучаете в настоящее время?",
+        q5_studentPlaceholder: "Например: 150",
 
-        q8_achievements: "Основные достижения ваших студентов",
-        q8_description: "Отметьте все подходящие достижения",
+        q6_employeeCount: "Сколько у вас сотрудников или учителей?",
+        q6_employeePlaceholder: "Например: 15",
 
-        q9_universities: "Есть ли у вас студенты, поступившие в зарубежные университеты? В какие страны?",
-        q9_placeholder: "Например: США, Южная Корея...",
+        q7_problemsFaced: "В каких отделах вы в настоящее время сталкиваетесь с проблемами?",
+        q7_problemsPlaceholder: "Кратко опишите проблемы",
 
-        q10_loan: "Хотели бы вы получить дополнительный кредит?",
-        q10_yes: "ДА",
-        q10_no: "НЕТ",
+        q8_trainingTopics: "Какие темы тренингов вам необходимы?",
+        q8_trainingPlaceholder: "Например: Бизнес-управление, маркетинг...",
 
-        q5_students: "Текущее количество студентов",
-        q5_placeholder: "Например: 150",
+        q9_trainingFormat: "Какой формат тренингов для вас удобнее?",
+        q9_formatPlaceholder: "Выберите формат",
 
-        q6_languages: "Сколько иностранных языков вы преподаете?",
+        q10_mentorPreference: "Какого руководителя учебного центра вы бы хотели видеть своим 'МЕНТОРОМ'?",
+        q10_mentorPlaceholder: "Введите имя ментора или название центра",
 
-        q7_achievements: "Основные достижения ваших студентов",
-        q7_description: "Отметьте все соответствующие достижения",
-
-        q8_universities: "Есть ли студенты, поступившие в зарубежные университеты? В какую страну?",
-        q8_placeholder: "Например: США, Южная Корея...",
-
-        q9_loan: "Хотели бы вы получить дополнительный кредит?",
-        q9_yes: "ДА",
-        q9_no: "НЕТ",
+        q11_suggestions: "Какие у вас есть предложения для вашего развития и становления ИДЕАЛЬНЫМ РУКОВОДИТЕЛЕМ?",
+        q11_suggestionsPlaceholder: "Оставьте свои предложения",
 
         // Submit
         submitButton: "Отправить опрос",
@@ -137,50 +133,41 @@ export const translations = {
         formSubtitle: "Please carefully fill in all the information below.",
 
         // Questions
-        q1_name: "Your Name",
-        q1_placeholder: "Enter your name",
+        q1_name: "Your First and Last Name?",
+        q1_placeholder: "Enter your full name",
 
-        q2_centerName: "Your Educational Center Name",
-        q2_placeholder: "Enter center name",
+        q2_location: "In which region did you open the training center?",
+        q2_locationPlaceholder: "Select region",
 
-        q3_location: "Region where your educational center is located",
-        q3_locationPlaceholder: "Select region",
-        q4_district: "District",
-        q4_districtPlaceholder: "Enter district",
-        q5_operatingStatus: "Is your educational center currently operating?",
-        q5_ha: "YES",
-        q5_jarayonda: "In Progress (Under renovation)",
-        q5_yoq: "NO",
+        q3_operatingStatus: "Has your center started its activities?",
+        q3_ha: "Yes",
+        q3_yoq: "No",
+        q3_startDate: "If no, when will it start its activities?",
+        q3_startDatePlaceholder: "E.g., In 1 month",
 
-        q6_studentCount: "Current number of students",
-        q6_studentPlaceholder: "For example: 150",
+        q4_centerName: "Name of your training center?",
+        q4_placeholder: "Enter center name",
 
-        q7_languages: "How many foreign languages do you teach?",
+        q5_studentCount: "How many students are you currently teaching?",
+        q5_studentPlaceholder: "Example: 150",
 
-        q8_achievements: "Key achievements of your students",
-        q8_description: "Check all applicable achievements",
+        q6_employeeCount: "How many employees or teachers do you have?",
+        q6_employeePlaceholder: "Example: 15",
 
-        q9_universities: "Do you have students admitted to foreign universities? Which countries?",
-        q9_placeholder: "For example: USA, South Korea...",
+        q7_problemsFaced: "In which departments are you currently facing problems?",
+        q7_problemsPlaceholder: "Briefly describe the problems",
 
-        q10_loan: "Would you like to receive additional financing?",
-        q10_yes: "YES",
-        q10_no: "NO",
+        q8_trainingTopics: "What topics of Trainings are necessary for you?",
+        q8_trainingPlaceholder: "E.g., Business management, marketing...",
 
-        q5_students: "Current Number of Students",
-        q5_placeholder: "Example: 150",
+        q9_trainingFormat: "Which format is more convenient for trainings?",
+        q9_formatPlaceholder: "Select format",
 
-        q6_languages: "How many foreign languages do you teach?",
+        q10_mentorPreference: "Which training center head would you like to be your 'MENTOR'?",
+        q10_mentorPlaceholder: "Enter mentor name or center name",
 
-        q7_achievements: "Main Achievements of Your Students",
-        q7_description: "Check all applicable achievements",
-
-        q8_universities: "Do you have students admitted to foreign universities? Which country?",
-        q8_placeholder: "Example: USA, South Korea...",
-
-        q9_loan: "Would you like to obtain an additional loan?",
-        q9_yes: "YES",
-        q9_no: "NO",
+        q11_suggestions: "What suggestions do you have for your development and becoming a PERFECT LEADER?",
+        q11_suggestionsPlaceholder: "Leave your suggestions",
 
         // Submit
         submitButton: "Submit Survey",
