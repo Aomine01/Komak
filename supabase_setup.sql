@@ -18,6 +18,7 @@ CREATE TABLE center_survey (
     -- Q3
     operating_status TEXT NOT NULL,
     operating_start_date TEXT, -- Only filled if status is 'yoq'
+    unclear_reason TEXT, -- Only filled if status is 'yoq' and start_date is 'noaniq'
     
     -- Q4
     center_name TEXT NOT NULL,
@@ -62,6 +63,7 @@ SELECT 'Table created successfully! Form ready to accept 11-question submissions
 
 ALTER TABLE center_survey 
 ADD COLUMN operating_start_date TEXT,
+ADD COLUMN unclear_reason TEXT,
 ADD COLUMN employee_count INTEGER DEFAULT 0,
 ADD COLUMN problems_faced TEXT DEFAULT '',
 ADD COLUMN training_topics TEXT DEFAULT '',

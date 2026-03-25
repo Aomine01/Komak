@@ -32,7 +32,14 @@ export const validateOperatingStatus = (status) => {
 
 export const validateOperatingStartDate = (status, startDate) => {
     if (status === 'yoq' && (!startDate || startDate.trim().length === 0)) {
-        return { isValid: false, errorMessage: "Qachon boshlash rejalashtirilganini kiriting" };
+        return { isValid: false, errorMessage: "Qachon boshlash rejalashtirilganini tanlang" };
+    }
+    return { isValid: true, errorMessage: '' };
+};
+
+export const validateUnclearReason = (status, startDate, reason) => {
+    if (status === 'yoq' && startDate === 'noaniq' && (!reason || reason.trim().length === 0)) {
+        return { isValid: false, errorMessage: "Iltimos, muammoni qisqacha yozing" };
     }
     return { isValid: true, errorMessage: '' };
 };
@@ -90,6 +97,9 @@ export const validateAllFields = (formData) => {
 
     const startDateValidation = validateOperatingStartDate(formData.operatingStatus, formData.operatingStartDate);
     if (!startDateValidation.isValid) errors.operatingStartDate = startDateValidation.errorMessage;
+
+    const unclearReasonValidation = validateUnclearReason(formData.operatingStatus, formData.operatingStartDate, formData.unclearReason);
+    if (!unclearReasonValidation.isValid) errors.unclearReason = unclearReasonValidation.errorMessage;
 
     const centerNameValidation = validateCenterName(formData.centerName);
     if (!centerNameValidation.isValid) errors.centerName = centerNameValidation.errorMessage;

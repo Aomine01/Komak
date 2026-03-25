@@ -12,7 +12,7 @@ import { useState, useEffect } from 'react';
 import { supabase } from './supabaseClient';
 import { validateAllFields } from './utils/validation';
 import { checkCooldown, setCooldown } from './utils/cooldown';
-import { REGIONS, OPERATING_STATUS, TRAINING_FORMAT } from './data/formOptions';
+import { REGIONS, OPERATING_STATUS, START_DATE_OPTIONS, TRAINING_FORMAT } from './data/formOptions';
 import { translations } from './utils/translations';
 
 function App() {
@@ -25,6 +25,7 @@ function App() {
         centerLocation: '',          // Q2: O'quv markazi hududi
         operatingStatus: '',         // Q3: Faoliyat ko'rsatyaptimi
         operatingStartDate: '',      // Q3.1: Qachon boshlaydi
+        unclearReason: '',           // Q3.2: Muammo nima
         centerName: '',              // Q4: Markaz nomi
         studentCount: '',            // Q5: O'quvchilar soni
         employeeCount: '',           // Q6: Xodimlar soni
@@ -109,7 +110,8 @@ function App() {
                 name: formData.name.trim(),
                 center_location: formData.centerLocation,
                 operating_status: formData.operatingStatus,
-                operating_start_date: formData.operatingStatus === 'yoq' ? formData.operatingStartDate.trim() : null,
+                operating_start_date: formData.operatingStatus === 'yoq' ? formData.operatingStartDate : null,
+                unclear_reason: (formData.operatingStatus === 'yoq' && formData.operatingStartDate === 'noaniq') ? formData.unclearReason.trim() : null,
                 center_name: formData.centerName.trim(),
                 student_count: parseInt(formData.studentCount, 10),
                 employee_count: parseInt(formData.employeeCount, 10),
@@ -140,6 +142,7 @@ function App() {
                 centerLocation: '',
                 operatingStatus: '',
                 operatingStartDate: '',
+                unclearReason: '',
                 centerName: '',
                 studentCount: '',
                 employeeCount: '',
@@ -333,17 +336,37 @@ function App() {
                                         <div className="pl-6 border-l-2 border-primary mt-4 space-y-4 animate-fadeIn">
                                             <p className="text-sm font-medium text-slate-700">{t.q3_startDate}</p>
                                             <div className="flex flex-col gap-2">
-                                                <input
-                                                    type="text"
+                                                <select
                                                     name="operatingStartDate"
                                                     value={formData.operatingStartDate}
                                                     onChange={handleInputChange}
                                                     disabled={isSubmitting}
                                                     className={`input-field ${formErrors.operatingStartDate ? 'border-red-500' : ''}`}
-                                                    placeholder={t.q3_startDatePlaceholder}
-                                                />
+                                                >
+                                                    <option value="">{t.q3_startDatePlaceholder}</option>
+                                                    {START_DATE_OPTIONS.map(option => (
+                                                        <option key={option.value} value={option.value}>{option.label}</option>
+                                                    ))}
+                                                </select>
                                                 {formErrors.operatingStartDate && <p className="error-text">{formErrors.operatingStartDate}</p>}
                                             </div>
+
+                                            {/* Sub-question if Noaniq */}
+                                            {formData.operatingStartDate === 'noaniq' && (
+                                                <div className="mt-4 animate-fadeIn space-y-2">
+                                                    <p className="text-sm font-medium text-slate-700">{t.q3_unclearReason}</p>
+                                                    <textarea
+                                                        name="unclearReason"
+                                                        value={formData.unclearReason}
+                                                        onChange={handleInputChange}
+                                                        disabled={isSubmitting}
+                                                        rows="2"
+                                                        className={`input-field min-h-[80px] resize-y p-3 ${formErrors.unclearReason ? 'border-red-500' : ''}`}
+                                                        placeholder={t.q3_unclearReasonPlaceholder}
+                                                    />
+                                                    {formErrors.unclearReason && <p className="error-text">{formErrors.unclearReason}</p>}
+                                                </div>
+                                            )}
                                         </div>
                                     )}
                                 </div>
